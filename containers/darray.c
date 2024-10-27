@@ -73,7 +73,7 @@ void* _darray_insert(void* array, u64 index, const void* data) {
     u64 length = darray_length(array);
     u64 stride = darray_stride(array);
 
-    if (index >= length || index < 0) {
+    if (index >= length) {
         LOGE("_darray_insert : index out of range");
     }
 
@@ -99,7 +99,7 @@ void darray_remove(void* array, u64 index) {
     u64 length = darray_length(array);
     u64 stride = darray_stride(array);
 
-    if (index >= length || index < 0) {
+    if (index >= length) {
         LOGE("_darray_insert : index out of range");
     }
 

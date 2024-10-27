@@ -67,6 +67,7 @@ void test_manager_run() {
             skipped += 1;
             LOGW("test skipped : %s ,time_s = %lf", test_manager[i].msg, clk.elapsed);
         }
+        // memory_state_log();
     }
 
     clock_end(&clk_total);

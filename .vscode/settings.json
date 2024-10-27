@@ -50,6 +50,8 @@
         "charconv": "c",
         "span": "c",
         "string": "c",
-        "expect.h": "c"
+        "expect.h": "c",
+        "list.h": "c",
+        "test_manager.h": "c"
     },
 }
