@@ -1,0 +1,55 @@
+{
+    "workbench.colorTheme": "Dracula Theme",
+    "editor.formatOnSave": true,
+    "editor.fontSize": 14,
+    "C_Cpp.default.compilerPath": "C:\\Program Files\\LLVM\\bin\\clang.exe",
+    "C_Cpp.default.cppStandard": "c++17",
+    "C_Cpp.default.cStandard": "c17",
+    "C_Cpp.default.intelliSenseMode": "clang-x64",
+    "C_Cpp.clang_format_style": "{ BasedOnStyle: LLVM, IndentWidth: 4, ColumnLimit: 0, NamespaceIndentation: All, BreakBeforeBraces: Attach, PointerAlignment: Left, IndentPPDirectives: AfterHash}",
+    "C_Cpp.vcFormat.newLine.beforeOpenBrace.block": "sameLine",
+    "C_Cpp.vcFormat.newLine.beforeOpenBrace.type": "sameLine",
+    "C_Cpp.vcFormat.newLine.beforeOpenBrace.function": "sameLine",
+    "C_Cpp.vcFormat.space.pointerReferenceAlignment": "left",
+    "C_Cpp.clang_format_sortIncludes": false,
+    "C_Cpp.vcFormat.indent.namespaceContents": true,
+    "todohighlight.keywords": [
+        {
+            "text": "FIXME:",
+            "backgroundColor": "#272B33",
+            "color": "#FF0000",
+            "overviewRulerColor": "#FF000"
+        },
+        {
+            "text": "TODO:",
+            "backgroundColor": "#272B33",
+            "color": "#00FF00",
+            "overviewRulerColor": "#FFB347"
+        }
+    ],
+    "files.associations": {
+        "stdlib.h": "c",
+        "vector": "c",
+        "xhash": "c",
+        "xstring": "c",
+        "ranges": "c",
+        "xlocale": "c",
+        "string_view": "c",
+        "array": "c",
+        "utility": "c",
+        "xutility": "c",
+        "compare": "c",
+        "format": "c",
+        "functional": "c",
+        "memory": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "variant": "c",
+        "xmemory": "c",
+        "xtr1common": "c",
+        "charconv": "c",
+        "span": "c",
+        "string": "c",
+        "expect.h": "c"
+    },
+}
