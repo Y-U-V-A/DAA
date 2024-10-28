@@ -134,7 +134,7 @@ u32 test_darray_struct_operations() {
     return TRUE;
 }
 
-void test_darray_reigster() {
+void test_darray_register() {
 
     test_manager_register_test(test_darray_init, "test_darray_init");
     test_manager_register_test(test_darray_push_back_integers, "test_darray_push_back_integers");

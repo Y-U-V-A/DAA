@@ -255,7 +255,7 @@ u32 test_list_merge_operations() {
     return TRUE;
 }
 
-void test_list_reigster() {
+void test_list_register() {
 
     test_manager_register_test(test_list_init, "test_list_init");
     test_manager_register_test(test_list_push_back_ints, "test_list_push_back_ints");

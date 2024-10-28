@@ -18,8 +18,6 @@ void destroy_list_node(list_node* node, u64 stride);
 list_node* reverse_list_nodes(list_node* node);
 list_node* sort_list_nodes(list_node* head, PFN_list_cmp cmp_func);
 
-#define list_create(type) _list_create(sizeof(type));
-
 list* _list_create(u64 stride) {
     list* temp = (list*)memory_allocate(sizeof(list), MEMORY_TAG_LIST);
     temp->size = 0;
