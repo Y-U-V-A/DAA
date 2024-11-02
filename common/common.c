@@ -105,6 +105,7 @@ const char* mem_str[] = {
     "STACK                ",
     "QUEUE                ",
     "PRIORITY_QUEUE       ",
+    "ALGORITHM            ",
 };
 
 void memory_state_log() {

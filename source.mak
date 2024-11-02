@@ -26,13 +26,18 @@ source:$(TARGET)
 
 $(TARGET):$(OFILES)
 	@echo "linking..."
+	@if not exist $(subst /,\,$(BIN_DIR)) mkdir $(subst /,\,$(BIN_DIR))
 	@$(CC) -fsanitize=address $^ -o $@
+	@echo "Done..."
+
+#$(dir $@)     # Expands to "src/"
+#$(notdir $@)  # Expands to "main.o"
 
 $(OBJ_DIR)/%.o:%.c
 	@if not exist $(subst /,\,$(OBJ_DIR)) mkdir $(subst /,\,$(OBJ_DIR))
 	@if not exist $(subst /,\,$(dir $@)) mkdir $(subst /,\,$(dir $@))
 	@$(CC) $(CCFLAGS) -fsanitize=address -c $< -o $@
-	@echo "compiled $<"
+	@echo "compiled $(notdir $<)"
 
 
 -include $(DFILES) #include dependency files to detect change dont forget

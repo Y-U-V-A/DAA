@@ -1,5 +1,7 @@
-#include "sorting_alg/bubble.h"
+#include "sorting_alg/merge.h"
+#include "common.h"
 
 int main() {
-    bubble_run();
+    merge_run();
+    memory_state_log();
 }

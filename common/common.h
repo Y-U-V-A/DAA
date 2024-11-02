@@ -10,6 +10,7 @@ typedef enum memory_tag {
     MEMORY_TAG_STACK,
     MEMORY_TAG_QUEUE,
     MEMORY_TAG_PRIORITY_QUEUE,
+    MEMORY_TAG_ALGORITHM,
 
     MEMORY_TAG_MAX,
 } memory_tag;

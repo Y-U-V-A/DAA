@@ -45,7 +45,7 @@ u32 test_queue_int() {
     }
 
     queue_destroy(que);
-    return TRUE;
+    return true;
 }
 
 // Test double operations
@@ -68,7 +68,7 @@ u32 test_queue_double() {
     }
 
     queue_destroy(que);
-    return TRUE;
+    return true;
 }
 
 // Test Task structure operations
@@ -98,7 +98,7 @@ u32 test_queue_task() {
     }
 
     queue_destroy(que);
-    return TRUE;
+    return true;
 }
 
 // Test Vector3 structure operations
@@ -128,7 +128,7 @@ u32 test_queue_vector() {
     }
 
     queue_destroy(que);
-    return TRUE;
+    return true;
 }
 
 // Test edge cases
@@ -155,7 +155,7 @@ u32 test_queue_edge_cases() {
     expect_should_be(value, *(i32*)queue_front(que));
 
     queue_destroy(que);
-    return TRUE;
+    return true;
 }
 
 void test_queue_register() {

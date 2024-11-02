@@ -52,6 +52,15 @@
         "string": "c",
         "expect.h": "c",
         "list.h": "c",
-        "test_manager.h": "c"
+        "test_manager.h": "c",
+        "bubble.h": "c",
+        "selection.h": "c",
+        "insertion.h": "c",
+        "quick.h": "c",
+        "common.h": "c",
+        "string.h": "c",
+        "stdarg.h": "c",
+        "stdio.h": "c",
+        "stdbool.h": "c"
     },
 }

@@ -31,7 +31,7 @@ u32 test_list_init() {
     expect_should_be(0, list_size(lst));
 
     list_destroy(lst);
-    return TRUE;
+    return true;
 }
 
 u32 test_list_push_back_ints() {
@@ -52,7 +52,7 @@ u32 test_list_push_back_ints() {
     }
 
     list_destroy(lst);
-    return TRUE;
+    return true;
 }
 
 u32 test_list_push_front_ints() {
@@ -70,7 +70,7 @@ u32 test_list_push_front_ints() {
     expect_should_be(3, *first);
 
     list_destroy(lst);
-    return TRUE;
+    return true;
 }
 
 u32 test_list_pop_operations() {
@@ -96,7 +96,7 @@ u32 test_list_pop_operations() {
     expect_should_be(2, *new_first);
 
     list_destroy(lst);
-    return TRUE;
+    return true;
 }
 
 u32 test_list_insert_remove() {
@@ -123,7 +123,7 @@ u32 test_list_insert_remove() {
     expect_should_be(2, *after_remove);
 
     list_destroy(lst);
-    return TRUE;
+    return true;
 }
 
 u32 test_list_sort_ints() {
@@ -145,7 +145,7 @@ u32 test_list_sort_ints() {
     }
 
     list_destroy(lst);
-    return TRUE;
+    return true;
 }
 
 u32 test_list_reverse_ints() {
@@ -165,7 +165,7 @@ u32 test_list_reverse_ints() {
     }
 
     list_destroy(lst);
-    return TRUE;
+    return true;
 }
 
 u32 test_list_unique_ints() {
@@ -191,7 +191,7 @@ u32 test_list_unique_ints() {
     expect_should_be(3, *third);
 
     list_destroy(lst);
-    return TRUE;
+    return true;
 }
 
 u32 test_list_struct_operations() {
@@ -221,7 +221,7 @@ u32 test_list_struct_operations() {
     expect_should_be(2, second->id);
 
     list_destroy(lst);
-    return TRUE;
+    return true;
 }
 
 u32 test_list_merge_operations() {
@@ -252,7 +252,7 @@ u32 test_list_merge_operations() {
     list_destroy(lst1);
     list_destroy(lst2);
 
-    return TRUE;
+    return true;
 }
 
 void test_list_register() {

@@ -42,7 +42,7 @@ u32 test_stack_int() {
     }
 
     stack_destroy(stk);
-    return TRUE;
+    return true;
 }
 
 // Test float operations
@@ -64,7 +64,7 @@ u32 test_stack_float() {
     }
 
     stack_destroy(stk);
-    return TRUE;
+    return true;
 }
 
 // Test Point structure operations
@@ -93,7 +93,7 @@ u32 test_stack_point() {
     }
 
     stack_destroy(stk);
-    return TRUE;
+    return true;
 }
 
 // Test Student structure operations
@@ -123,7 +123,7 @@ u32 test_stack_student() {
     }
 
     stack_destroy(stk);
-    return TRUE;
+    return true;
 }
 
 void test_stack_register() {

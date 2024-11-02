@@ -1,6 +1,8 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
+#include <stdbool.h>
+
 typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned int u32;
@@ -14,11 +16,8 @@ typedef signed long long i64;
 typedef float f32;
 typedef double f64;
 
-typedef _Bool b8;
+typedef bool b8;
 
-#define FALSE 0
-#define TRUE 1
-#define BYPASS 2
 #define EPSILON __FLT_EPSILON__
 #define CLAMP(val, min, max) ((val >= max ? max : (val <= min ? min : val)))
 #define ABS(val) ((val < 0) ? -val : val)

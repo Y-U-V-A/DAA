@@ -20,7 +20,7 @@ u32 test_darray_init() {
     expect_should_be(0, darray_length(array));
 
     darray_destroy(array);
-    return TRUE;
+    return true;
 }
 
 u32 test_darray_push_back_integers() {
@@ -41,7 +41,7 @@ u32 test_darray_push_back_integers() {
     expect_should_be(8, darray_capacity(array)); // Should have resized to 8 (2 * DARRAY_DEFAULT_LENGTH * DARRAY_RESIZE_FACTOR)
 
     darray_destroy(array);
-    return TRUE;
+    return true;
 }
 
 u32 test_darray_pop_back_integers() {
@@ -60,7 +60,7 @@ u32 test_darray_pop_back_integers() {
     expect_should_be(1, array[1]);
 
     darray_destroy(array);
-    return TRUE;
+    return true;
 }
 
 u32 test_darray_insert_integers() {
@@ -80,7 +80,7 @@ u32 test_darray_insert_integers() {
     expect_should_be(1, array[2]); // Original value should have been shifted
 
     darray_destroy(array);
-    return TRUE;
+    return true;
 }
 
 u32 test_darray_remove_integers() {
@@ -98,7 +98,7 @@ u32 test_darray_remove_integers() {
     expect_should_be(2, array[1]); // Element at index 2 should have shifted down
 
     darray_destroy(array);
-    return TRUE;
+    return true;
 }
 
 u32 test_darray_struct_operations() {
@@ -131,7 +131,7 @@ u32 test_darray_struct_operations() {
     expect_should_be(test_item.x, array[1].x);
 
     darray_destroy(array);
-    return TRUE;
+    return true;
 }
 
 void test_darray_register() {

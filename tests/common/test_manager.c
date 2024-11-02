@@ -52,17 +52,17 @@ void test_manager_run() {
 
         clock_end(&clk);
 
-        if (result == FALSE) {
+        if (result == false) {
 
             failed += 1;
             LOGE("test failed : %s , time_s = %lf ", test_manager[i].msg, clk.elapsed);
 
-        } else if (result == TRUE) {
+        } else if (result == true) {
 
             passed += 1;
             LOGT("test passed : %s ,time_s = %lf ", test_manager[i].msg, clk.elapsed);
 
-        } else if (result == BYPASS) {
+        } else {
 
             skipped += 1;
             LOGW("test skipped : %s ,time_s = %lf", test_manager[i].msg, clk.elapsed);
