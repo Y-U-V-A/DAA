@@ -1,7 +1,7 @@
-#include "sorting_alg/merge.h"
+#include "sorting_alg/radix.h"
 #include "common.h"
 
 int main() {
-    merge_run();
+    radix_run();
     memory_state_log();
 }

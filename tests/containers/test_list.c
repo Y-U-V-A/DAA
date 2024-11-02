@@ -11,15 +11,15 @@ typedef struct {
 } Student;
 
 // Comparison functions
-u32 compare_ints(void* a, void* b) {
+b8 compare_ints(void* a, void* b) {
     return *(int*)a <= *(int*)b;
 }
 
-u32 unique_ints(void* a, void* b) {
+b8 unique_ints(void* a, void* b) {
     return *(int*)a == *(int*)b;
 }
 
-u32 compare_students_by_id(void* a, void* b) {
+b8 compare_students_by_id(void* a, void* b) {
     Student* s1 = (Student*)a;
     Student* s2 = (Student*)b;
     return s1->id <= s2->id;

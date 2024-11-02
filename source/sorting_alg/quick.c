@@ -13,24 +13,26 @@ void quick_sort(i32* arr, i32 s, i32 e) {
 
     while (i < j) {
 
-        while (i <= e && arr[i] <= x) {
-            i++;
+        while (i < e && arr[i] <= x) {
+            ++i;
         }
 
         while (j > s && arr[j] > x) {
-            j--;
+            --j;
         }
 
         if (i < j) {
-            i32 temp = arr[i];
-            arr[i] = arr[j];
-            arr[j] = temp;
+            arr[j] ^= arr[i];
+            arr[i] ^= arr[j];
+            arr[j] ^= arr[i];
         }
     }
 
-    i32 temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
+    if (s != j) {
+        arr[s] ^= arr[j];
+        arr[j] ^= arr[s];
+        arr[s] ^= arr[j];
+    }
 
     quick_sort(arr, s, j - 1);
     quick_sort(arr, j + 1, e);

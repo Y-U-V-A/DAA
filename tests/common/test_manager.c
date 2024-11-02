@@ -37,7 +37,7 @@ void test_manager_run() {
     clock clk_total;
     clock_start(&clk_total);
 
-    u64 length = darray_length(test_manager);
+    u64 length = darray_size(test_manager);
 
     u32 passed = 0;
     u32 failed = 0;

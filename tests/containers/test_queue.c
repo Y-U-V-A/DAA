@@ -3,9 +3,6 @@
 #include "test_manager.h"
 #include "queue.h"
 
-#include "queue.h"
-#include "expect.h"
-
 // Test structures
 typedef struct {
     i32 priority;

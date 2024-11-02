@@ -5,7 +5,7 @@
 
 typedef struct list list;
 
-typedef u32 (*PFN_list_cmp)(void* data_1, void* data_2);
+typedef b8 (*PFN_list_cmp)(void* data_1, void* data_2);
 
 #define list_create(type) _list_create(sizeof(type))
 

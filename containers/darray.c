@@ -42,7 +42,7 @@ void _darray_set_field(void* array, u64 value, darray_field field) {
 
 void* _darray_push_back(void* array, const void* data) {
 
-    u64 length = darray_length(array);
+    u64 length = darray_size(array);
     u64 stride = darray_stride(array);
 
     if (length >= darray_capacity(array)) {
@@ -60,7 +60,7 @@ void* _darray_push_back(void* array, const void* data) {
 
 void darray_pop_back(void* array) {
 
-    u64 length = darray_length(array);
+    u64 length = darray_size(array);
     if (length == 0) {
         LOGE("darray_pop_back : no elements to pop");
         return;
@@ -70,7 +70,7 @@ void darray_pop_back(void* array) {
 
 void* _darray_insert(void* array, u64 index, const void* data) {
 
-    u64 length = darray_length(array);
+    u64 length = darray_size(array);
     u64 stride = darray_stride(array);
 
     if (index >= length) {
@@ -96,7 +96,7 @@ void* _darray_insert(void* array, u64 index, const void* data) {
 
 void darray_remove(void* array, u64 index) {
 
-    u64 length = darray_length(array);
+    u64 length = darray_size(array);
     u64 stride = darray_stride(array);
 
     if (index >= length) {
@@ -119,7 +119,7 @@ void darray_remove(void* array, u64 index) {
 
 void* darray_resize(void* array) {
 
-    u64 length = darray_length(array);
+    u64 length = darray_size(array);
     u64 stride = darray_stride(array);
 
     void* temp = _darray_create(DARRAY_RESIZE_FACTOR * darray_capacity(array), stride);

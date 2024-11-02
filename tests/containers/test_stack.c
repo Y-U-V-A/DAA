@@ -3,9 +3,6 @@
 #include "test_manager.h"
 #include "stack.h"
 
-#include "stack.h"
-#include "expect.h"
-
 // Test structures
 typedef struct {
     i32 x;
