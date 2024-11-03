@@ -1,2 +1,2 @@
 # DAA
-data structures and Algorithms in c
+data structures and Algorithms in C
