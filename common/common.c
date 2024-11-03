@@ -87,6 +87,15 @@ u64 string_length(const char* str) {
     return strlen(str);
 }
 
+void string_format(char* buffer, u64 buffer_size, const char* fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+
+    vsnprintf(buffer, buffer_size, fmt, args);
+
+    va_end(args);
+}
+
 f64 get_time() {
 
     LARGE_INTEGER frq;

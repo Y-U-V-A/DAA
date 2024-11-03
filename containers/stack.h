@@ -11,7 +11,7 @@ stack* _stack_create(u64 stride);
 
 void stack_destroy(stack* stk);
 
-void stack_push(stack* stk, void* data);
+void stack_push(stack* stk, const void* data);
 
 void stack_pop(stack* stk);
 

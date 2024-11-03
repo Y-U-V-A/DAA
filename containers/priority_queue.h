@@ -5,7 +5,7 @@
 
 typedef struct priority_queue priority_queue;
 
-typedef b8 (*PFN_priority_cmp)(void* parent, void* child);
+typedef b8 (*PFN_priority_cmp)(const void* parent, const void* child);
 
 #define priority_queue_create(type) _priority_queue_create(sizeof(type), PFN_priority_cmp);
 
@@ -13,7 +13,7 @@ priority_queue* _priority_queue_create(u64 stride, PFN_priority_cmp cmp_func);
 
 void priority_queue_destroy(priority_queue* prio_que);
 
-void priority_queue_push(priority_queue* prio_que, void* data);
+void priority_queue_push(priority_queue* prio_que, const void* data);
 
 void priority_queue_pop(priority_queue* prio_que);
 

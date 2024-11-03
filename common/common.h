@@ -51,6 +51,8 @@ i32 string_compare(const char* str1, const char* str2);
 
 u64 string_length(const char* str);
 
+void string_format(char* buffer, u64 buffer_size, const char* fmt, ...);
+
 f64 get_time();
 
 void memory_state_log();

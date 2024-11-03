@@ -17,7 +17,7 @@ struct queue {
     u64 stride;
 };
 
-queue_node* create_queue_node(void* data, u64 stride);
+queue_node* create_queue_node(const void* data, u64 stride);
 void destroy_queue_node(queue_node* node, u64 stride);
 
 queue* _queue_create(u64 stride) {
@@ -37,7 +37,7 @@ void queue_destroy(queue* que) {
     memory_free(que, sizeof(queue), MEMORY_TAG_QUEUE);
 }
 
-void queue_push(queue* que, void* data) {
+void queue_push(queue* que, const void* data) {
     queue_node* node = create_queue_node(data, que->stride);
 
     if (que->front == 0) {
@@ -89,7 +89,7 @@ u64 queue_size(queue* que) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-queue_node* create_queue_node(void* data, u64 stride) {
+queue_node* create_queue_node(const void* data, u64 stride) {
     queue_node* temp = (queue_node*)memory_allocate(sizeof(queue_node), MEMORY_TAG_QUEUE);
     temp->next = 0;
     temp->data = memory_allocate(stride, MEMORY_TAG_QUEUE);

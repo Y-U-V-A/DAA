@@ -12,6 +12,7 @@
             "args": [],
             "cwd": "${workspaceFolder}",
             "console": "externalTerminal",
+            "terminal": "external",
             "stopOnEntry": false,
         }
     ]

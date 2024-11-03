@@ -26,7 +26,7 @@ void priority_queue_destroy(priority_queue* prio_que) {
     }
 }
 
-void priority_queue_push(priority_queue* prio_que, void* data) {
+void priority_queue_push(priority_queue* prio_que, const void* data) {
     u64 stride = darray_stride(prio_que->array);
 
     prio_que->array = _darray_push_back(prio_que->array, data);

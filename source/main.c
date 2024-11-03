@@ -1,7 +1,7 @@
-#include "sorting_alg/radix.h"
+#include "stack_problems/pre_post.h"
 #include "common.h"
 
 int main() {
-    radix_run();
+    pre_post_run();
     memory_state_log();
 }

@@ -8,7 +8,7 @@ typedef struct stack_node {
 
 } stack_node;
 
-stack_node* create_stack_node(void* data, u64 stride);
+stack_node* create_stack_node(const void* data, u64 stride);
 
 void destroy_stack_node(stack_node* node, u64 stride);
 
@@ -35,7 +35,7 @@ void stack_destroy(stack* stk) {
     memory_free(stk, sizeof(stack), MEMORY_TAG_STACK);
 }
 
-void stack_push(stack* stk, void* data) {
+void stack_push(stack* stk, const void* data) {
     stack_node* node = create_stack_node(data, stk->stride);
 
     if (stk->top == 0) {
@@ -79,7 +79,7 @@ u64 stack_size(stack* stk) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-stack_node* create_stack_node(void* data, u64 stride) {
+stack_node* create_stack_node(const void* data, u64 stride) {
     stack_node* temp = (stack_node*)memory_allocate(sizeof(stack_node), MEMORY_TAG_STACK);
     temp->next = 0;
     temp->data = memory_allocate(stride, MEMORY_TAG_STACK);

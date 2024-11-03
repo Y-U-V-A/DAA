@@ -5,7 +5,7 @@
 
 typedef struct list list;
 
-typedef b8 (*PFN_list_cmp)(void* data_1, void* data_2);
+typedef b8 (*PFN_list_cmp)(const void* data_1, const void* data_2);
 
 #define list_create(type) _list_create(sizeof(type))
 
@@ -13,15 +13,15 @@ list* _list_create(u64 stride);
 
 void list_destroy(list* lst);
 
-void list_push_back(list* lst, void* data);
+void list_push_back(list* lst, const void* data);
 
 void list_pop_back(list* lst);
 
-void list_push_front(list* lst, void* data);
+void list_push_front(list* lst, const void* data);
 
 void list_pop_front(list* lst);
 
-void list_insert(list* lst, u64 index, void* data);
+void list_insert(list* lst, u64 index, const void* data);
 
 void list_remove(list* lst, u64 index);
 

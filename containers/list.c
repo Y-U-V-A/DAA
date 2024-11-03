@@ -13,7 +13,7 @@ struct list {
     u64 stride;
 };
 
-list_node* create_list_node(void* data, u64 stride);
+list_node* create_list_node(const void* data, u64 stride);
 void destroy_list_node(list_node* node, u64 stride);
 list_node* reverse_list_nodes(list_node* node);
 list_node* sort_list_nodes(list_node* head, PFN_list_cmp cmp_func);
@@ -35,7 +35,7 @@ void list_destroy(list* lst) {
     memory_free(lst, sizeof(list), MEMORY_TAG_LIST);
 }
 
-void list_push_back(list* lst, void* data) {
+void list_push_back(list* lst, const void* data) {
     list_node* node = create_list_node(data, lst->stride);
 
     if (!lst->node) {
@@ -73,7 +73,7 @@ void list_pop_back(list* lst) {
     lst->size -= 1;
 }
 
-void list_push_front(list* lst, void* data) {
+void list_push_front(list* lst, const void* data) {
     list_node* node = create_list_node(data, lst->stride);
 
     if (!lst->node) {
@@ -108,7 +108,7 @@ void list_pop_front(list* lst) {
     lst->size -= 1;
 }
 
-void list_insert(list* lst, u64 index, void* data) {
+void list_insert(list* lst, u64 index, const void* data) {
 
     if (index > lst->size) {
         LOGW("list_insert : index out of range");
@@ -287,7 +287,7 @@ void list_unique(list* sorted_lst, PFN_list_cmp cmp_func) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-list_node* create_list_node(void* data, u64 stride) {
+list_node* create_list_node(const void* data, u64 stride) {
     list_node* temp = (list_node*)memory_allocate(sizeof(list_node), MEMORY_TAG_LIST);
     temp->data = memory_allocate(stride, MEMORY_TAG_LIST);
     memory_copy(temp->data, data, stride);

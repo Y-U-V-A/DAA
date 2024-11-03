@@ -11,7 +11,7 @@ queue* _queue_create(u64 stride);
 
 void queue_destroy(queue* que);
 
-void queue_push(queue* que, void* data);
+void queue_push(queue* que, const void* data);
 
 void queue_pop(queue* que);
 

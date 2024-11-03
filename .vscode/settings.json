@@ -63,6 +63,12 @@
         "stdio.h": "c",
         "stdbool.h": "c",
         "merge.h": "c",
-        "initializer_list": "c"
+        "initializer_list": "c",
+        "threads.h": "c",
+        "priority_queue.h": "c",
+        "infix_post.h": "c",
+        "infix_pre.h": "c",
+        "post_infix.h": "c",
+        "post_pre.h": "c"
     },
 }

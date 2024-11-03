@@ -3,8 +3,8 @@
 #include "test_manager.h"
 #include "priority_queue.h"
 
-b8 int_compare(void* parent, void* child) {
-    return *(i32*)parent >= *(i32*)child;
+b8 int_compare(const void* parent, const void* child) {
+    return *(const i32*)parent >= *(const i32*)child;
 }
 
 // Test struct for complex data type testing
@@ -14,9 +14,9 @@ typedef struct TestItem {
 } TestItem;
 
 // Compare function for TestItem (max heap based on priority)
-b8 test_item_compare(void* parent, void* child) {
-    TestItem* p = (TestItem*)parent;
-    TestItem* c = (TestItem*)child;
+b8 test_item_compare(const void* parent, const void* child) {
+    const TestItem* p = (const TestItem*)parent;
+    const TestItem* c = (const TestItem*)child;
     return p->priority >= c->priority;
 }
 
