@@ -69,6 +69,7 @@
         "infix_post.h": "c",
         "infix_pre.h": "c",
         "post_infix.h": "c",
-        "post_pre.h": "c"
+        "post_pre.h": "c",
+        "next_greater.h": "c"
     },
 }
