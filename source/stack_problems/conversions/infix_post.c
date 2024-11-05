@@ -2,7 +2,7 @@
 #include "stack.h"
 #include "common.h"
 
-i32 get_priority_post(i8 op) {
+i32 get_priority_post(char op) {
 
     if (op == '+' || op == '-') {
         return 0;
@@ -17,10 +17,10 @@ i32 get_priority_post(i8 op) {
     return -1;
 }
 
-void infix_post(const char* infix_exp, i8* post_exp) {
+void infix_post(const char* infix_exp, char* post_exp) {
 
     i32 j = 0;
-    stack* stk = stack_create(i8);
+    stack* stk = stack_create(char);
 
     for (i32 i = 0; infix_exp[i] != '\0'; ++i) {
         if ((infix_exp[i] >= 'a' && infix_exp[i] <= 'z') || (infix_exp[i] >= 'A' && infix_exp[i] <= 'Z')) {
@@ -32,16 +32,16 @@ void infix_post(const char* infix_exp, i8* post_exp) {
 
         } else if (infix_exp[i] == '+' || infix_exp[i] == '-' || infix_exp[i] == '*' || infix_exp[i] == '/' || infix_exp[i] == '^') {
 
-            while (stack_size(stk) != 0 && get_priority_post(*(i8*)stack_top(stk)) >= get_priority_post(infix_exp[i])) {
-                post_exp[j++] = *(i8*)stack_top(stk);
+            while (stack_size(stk) != 0 && get_priority_post(*(char*)stack_top(stk)) >= get_priority_post(infix_exp[i])) {
+                post_exp[j++] = *(char*)stack_top(stk);
                 stack_pop(stk);
             }
             stack_push(stk, &infix_exp[i]);
 
         } else if (infix_exp[i] == ')') {
 
-            while (stack_size(stk) != 0 && *(i8*)stack_top(stk) != '(') {
-                post_exp[j++] = *(i8*)stack_top(stk);
+            while (stack_size(stk) != 0 && *(char*)stack_top(stk) != '(') {
+                post_exp[j++] = *(char*)stack_top(stk);
                 stack_pop(stk);
             }
             stack_pop(stk);
@@ -49,7 +49,7 @@ void infix_post(const char* infix_exp, i8* post_exp) {
     }
 
     while (stack_size(stk) != 0) {
-        post_exp[j++] = *(i8*)stack_top(stk);
+        post_exp[j++] = *(char*)stack_top(stk);
         stack_pop(stk);
     }
 
@@ -119,7 +119,7 @@ void infix_post_run() {
     i32 failed = 0;
     for (i32 i = 0; i < exps_len; ++i) {
 
-        i8 buffer[200] = {0};
+        char buffer[200] = {0};
         infix_post(exps[i], buffer);
 
         if (string_compare(buffer, results[i]) != 0) {

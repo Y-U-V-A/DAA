@@ -1,7 +1,9 @@
 
 INCLUDE_DIRS = common containers source
 
-CODE_DIRS = common containers source source/sorting_algo source/stack_problems source/stack_problems/conversions
+CODE_DIRS = common containers source \
+source/sorting_algo source/stack_problems source/stack_problems/conversions \
+source/heap_problems\
 
 
 #bin dir

@@ -1,7 +1,7 @@
-#include "stack_problems/next_smaller.h"
+#include "heap_problems/kth_smallest.h"
 #include "common.h"
 
 int main() {
-    next_smaller_run();
+    kth_smallest_run();
     memory_state_log();
 }

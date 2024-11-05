@@ -3,10 +3,10 @@
 #include "common.h"
 
 typedef struct string {
-    i8 buffer[100];
+    char buffer[100];
 } string;
 
-void post_infix(const char* post_exp, i8* infix_exp) {
+void post_infix(const char* post_exp, char* infix_exp) {
 
     stack* stk = stack_create(string);
 
@@ -103,7 +103,7 @@ void post_infix_run() {
     i32 failed = 0;
     for (i32 i = 0; i < exps_len; ++i) {
 
-        i8 buffer[200] = {0};
+        char buffer[200] = {0};
         post_infix(exps[i], buffer);
 
         if (string_compare(buffer, results[i]) != 0) {

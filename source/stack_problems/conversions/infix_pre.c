@@ -2,7 +2,7 @@
 #include "stack.h"
 #include "common.h"
 
-i32 get_priority_pre(i8 op) {
+i32 get_priority_pre(char op) {
 
     if (op == '+' || op == '-') {
         return 0;
@@ -17,9 +17,9 @@ i32 get_priority_pre(i8 op) {
     return -1;
 }
 
-void infix_pre(const char* infix_exp, i8* pre_exp) {
+void infix_pre(const char* infix_exp, char* pre_exp) {
 
-    stack* stk = stack_create(i8);
+    stack* stk = stack_create(char);
 
     i32 str_len = string_length(infix_exp);
     i32 j = 0;
@@ -37,16 +37,16 @@ void infix_pre(const char* infix_exp, i8* pre_exp) {
 
         } else if (infix_exp[i] == '+' || infix_exp[i] == '-' || infix_exp[i] == '*' || infix_exp[i] == '/' || infix_exp[i] == '^') {
 
-            while (stack_size(stk) != 0 && get_priority_pre(*(i8*)stack_top(stk)) > get_priority_pre(infix_exp[i])) {
-                buffer[j++] = *(i8*)stack_top(stk);
+            while (stack_size(stk) != 0 && get_priority_pre(*(char*)stack_top(stk)) > get_priority_pre(infix_exp[i])) {
+                buffer[j++] = *(char*)stack_top(stk);
                 stack_pop(stk);
             }
             stack_push(stk, &infix_exp[i]);
 
         } else if (infix_exp[i] == '(') {
 
-            while (stack_size(stk) != 0 && *(i8*)stack_top(stk) != ')') {
-                buffer[j++] = *(i8*)stack_top(stk);
+            while (stack_size(stk) != 0 && *(char*)stack_top(stk) != ')') {
+                buffer[j++] = *(char*)stack_top(stk);
                 stack_pop(stk);
             }
             stack_pop(stk);
@@ -54,7 +54,7 @@ void infix_pre(const char* infix_exp, i8* pre_exp) {
     }
 
     while (stack_size(stk) != 0) {
-        buffer[j++] = *(i8*)stack_top(stk);
+        buffer[j++] = *(char*)stack_top(stk);
         stack_pop(stk);
     }
 
@@ -131,7 +131,7 @@ void infix_pre_run() {
     i32 failed = 0;
     for (i32 i = 0; i < exps_len; ++i) {
 
-        i8 buffer[200] = {0};
+        char buffer[200] = {0};
         infix_pre(exps[i], buffer);
 
         if (string_compare(buffer, results[i]) != 0) {

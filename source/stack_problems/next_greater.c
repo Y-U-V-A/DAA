@@ -34,7 +34,7 @@ void next_greater() {
     stack_destroy(stk);
 
     const u32 buffer_size = 1000;
-    u8 buffer[buffer_size];
+    char buffer[buffer_size];
     u32 offset = log_buffer(buffer, buffer_size, "array = ");
 
     for (i32 i = 0; i < n; ++i) {
