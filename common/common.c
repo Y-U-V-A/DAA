@@ -79,6 +79,10 @@ void* memory_move(void* dest, const void* src, u64 size) {
     return memmove(dest, src, size);
 }
 
+i32 memory_compare(const void* block1, const void* block2, u64 size) {
+    return memcmp(block1, block2, size);
+}
+
 i32 string_compare(const char* str1, const char* str2) {
     return strcmp(str1, str2);
 }
@@ -114,6 +118,7 @@ const char* mem_str[] = {
     "STACK                ",
     "QUEUE                ",
     "PRIORITY_QUEUE       ",
+    "UNORDERED_MAP        ",
     "ALGORITHM            ",
 };
 
@@ -123,7 +128,8 @@ void memory_state_log() {
     u32 mb = 1024 * 1024;
     u32 gb = 1024 * 1024 * 1024;
 
-    char buffer[1000] = {0};
+    const u64 buffer_size = 2000;
+    char buffer[buffer_size] = {0};
 
     u32 offset = 0;
 
@@ -147,7 +153,7 @@ void memory_state_log() {
             ammount = state.tagged_allocations[i];
         }
 
-        u32 written = (u32)snprintf(buffer + offset, 1000 - offset, "%s:%lf%s\n", mem_str[i], ammount, str);
+        u32 written = (u32)snprintf(buffer + offset, buffer_size - offset, "%s:%lf%s\n", mem_str[i], ammount, str);
         offset += written;
     }
     LOGD("tagged memory allocations... \n%s", buffer);

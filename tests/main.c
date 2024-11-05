@@ -4,6 +4,7 @@
 #include "containers/test_stack.h"
 #include "containers/test_queue.h"
 #include "containers/test_priority_queue.h"
+#include "containers/test_unordered_map.h"
 
 #include "common.h"
 
@@ -17,6 +18,7 @@ int main() {
     test_stack_register();
     test_queue_register();
     test_priority_queue_register();
+    test_unordered_map_register();
 
     test_manager_run();
 

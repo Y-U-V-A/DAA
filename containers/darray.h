@@ -22,7 +22,7 @@ typedef enum darray_field {
 #define darray_capacity(darray) _darray_get_field(darray, DARRAY_FIELD_CAPACITY)
 #define darray_stride(darray) _darray_get_field(darray, DARRAY_FIELD_STRIDE)
 
-#define darray_clear(darray) _darray_set_field(darray, 0, DARRAY_FIELD_LENGTH);
+#define darray_clear(darray) _darray_set_field(darray, 0, DARRAY_FIELD_LENGTH)
 #define darray_set_length(darray, value) _darray_set_field(darray, value, DARRAY_FIELD_LENGTH)
 
 #define darray_push_back(darray, data)                             \

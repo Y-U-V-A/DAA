@@ -7,7 +7,7 @@ typedef struct priority_queue priority_queue;
 
 typedef b8 (*PFN_priority_cmp)(const void* parent, const void* child);
 
-#define priority_queue_create(type, PFN_priority_cmp) _priority_queue_create(sizeof(type), PFN_priority_cmp);
+#define priority_queue_create(type, PFN_priority_cmp) _priority_queue_create(sizeof(type), PFN_priority_cmp)
 
 priority_queue* _priority_queue_create(u64 stride, PFN_priority_cmp cmp_func);
 

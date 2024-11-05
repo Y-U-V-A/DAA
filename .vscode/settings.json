@@ -72,6 +72,7 @@
         "post_pre.h": "c",
         "next_greater.h": "c",
         "next_smaller.h": "c",
-        "kth_largest.h": "c"
+        "kth_largest.h": "c",
+        "test_unordered_map.h": "c"
     },
 }
