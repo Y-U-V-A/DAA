@@ -119,6 +119,7 @@ const char* mem_str[] = {
     "QUEUE                ",
     "PRIORITY_QUEUE       ",
     "UNORDERED_MAP        ",
+    "MAP                  ",
     "ALGORITHM            ",
 };
 

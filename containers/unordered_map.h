@@ -11,6 +11,7 @@ typedef struct unordered_map unordered_map;
 
 typedef u64 (*PFN_unordered_map_hash)(const void* key, u64 key_stride);
 
+// pass zero for default hash;
 #define unordered_map_create(key_type, data_type, PFN_unordered_map_hash) \
     _unordered_map_create(UNORDERED_MAP_DEFAULT_SIZE, sizeof(key_type), sizeof(data_type), PFN_unordered_map_hash)
 
