@@ -3,7 +3,7 @@
 #include "test_manager.h"
 #include "priority_queue.h"
 
-b8 int_compare(const void* parent, const void* child) {
+b8 prio_que_int_compare(const void* parent, const void* child) {
     return *(const i32*)parent >= *(const i32*)child;
 }
 
@@ -14,7 +14,7 @@ typedef struct TestItem {
 } TestItem;
 
 // Compare function for TestItem (max heap based on priority)
-b8 test_item_compare(const void* parent, const void* child) {
+b8 prio_que_item_compare(const void* parent, const void* child) {
     const TestItem* p = (const TestItem*)parent;
     const TestItem* c = (const TestItem*)child;
     return p->priority >= c->priority;
@@ -22,7 +22,7 @@ b8 test_item_compare(const void* parent, const void* child) {
 
 u32 test_priority_queue_basic_operations() {
     // Create a priority queue for integers
-    priority_queue* pq = _priority_queue_create(sizeof(i32), int_compare);
+    priority_queue* pq = _priority_queue_create(sizeof(i32), prio_que_int_compare);
 
     // Test initial size
     expect_should_be(0, priority_queue_size(pq));
@@ -57,7 +57,7 @@ u32 test_priority_queue_basic_operations() {
 
 u32 test_priority_queue_struct_operations() {
     // Create a priority queue for TestItem structs
-    priority_queue* pq = _priority_queue_create(sizeof(TestItem), test_item_compare);
+    priority_queue* pq = _priority_queue_create(sizeof(TestItem), prio_que_item_compare);
 
     // Test initial size
     expect_should_be(0, priority_queue_size(pq));
@@ -99,7 +99,7 @@ u32 test_priority_queue_struct_operations() {
     return true;
 }
 
-void test_priority_queue_register() {
+void register_priority_queue_tests() {
     test_manager_register_test(test_priority_queue_basic_operations, "test_priority_queue_basic_operations");
     test_manager_register_test(test_priority_queue_struct_operations, "test_priority_queue_struct_operations");
 }

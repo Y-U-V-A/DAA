@@ -11,7 +11,7 @@ typedef struct {
 
 typedef struct {
     char name[32];
-    float score;
+    f32 score;
 } Student;
 
 // Test integer operations
@@ -42,21 +42,21 @@ u32 test_stack_int() {
     return true;
 }
 
-// Test float operations
+// Test f32 operations
 u32 test_stack_float() {
-    stack* stk = stack_create(float);
+    stack* stk = stack_create(f32);
 
-    float values[] = {1.5f, 2.7f, 3.14f, 4.2f};
+    f32 values[] = {1.5f, 2.7f, 3.14f, 4.2f};
 
     // Push and verify
     for (i32 i = 0; i < 4; i++) {
         stack_push(stk, &values[i]);
-        expect_float_should_be(values[i], *(float*)stack_top(stk));
+        expect_float_should_be(values[i], *(f32*)stack_top(stk));
     }
 
     // Pop and verify
     for (i32 i = 3; i >= 0; i--) {
-        expect_float_should_be(values[i], *(float*)stack_top(stk));
+        expect_float_should_be(values[i], *(f32*)stack_top(stk));
         stack_pop(stk);
     }
 
@@ -123,7 +123,7 @@ u32 test_stack_student() {
     return true;
 }
 
-void test_stack_register() {
+void register_stack_tests() {
 
     test_manager_register_test(test_stack_int, "test_stack_int");
     test_manager_register_test(test_stack_float, "test_stack_float");

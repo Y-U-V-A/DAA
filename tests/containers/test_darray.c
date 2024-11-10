@@ -7,7 +7,7 @@
 
 typedef struct {
     i32 x;
-    float y;
+    f32 y;
     char name[32];
 } TestStruct;
 
@@ -134,7 +134,7 @@ u32 test_darray_struct_operations() {
     return true;
 }
 
-void test_darray_register() {
+void register_darray_tests() {
 
     test_manager_register_test(test_darray_init, "test_darray_init");
     test_manager_register_test(test_darray_push_back_integers, "test_darray_push_back_integers");

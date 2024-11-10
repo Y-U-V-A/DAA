@@ -100,9 +100,8 @@ queue_node* create_queue_node(const void* data, u64 stride) {
 }
 
 void destroy_queue_node(queue_node* node, u64 stride) {
-    if (node->next == 0) {
-        memory_free(node->data, stride, MEMORY_TAG_QUEUE);
-        memory_free(node, sizeof(queue_node), MEMORY_TAG_QUEUE);
+
+    if (!node) {
         return;
     }
 

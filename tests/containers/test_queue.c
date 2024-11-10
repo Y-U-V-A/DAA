@@ -155,7 +155,7 @@ u32 test_queue_edge_cases() {
     return true;
 }
 
-void test_queue_register() {
+void register_queue_tests() {
     test_manager_register_test(test_queue_int, "test_queue_int");
     test_manager_register_test(test_queue_double, "test_queue_double");
     test_manager_register_test(test_queue_task, "test_queue_task");

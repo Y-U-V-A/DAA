@@ -90,9 +90,7 @@ stack_node* create_stack_node(const void* data, u64 stride) {
 }
 
 void destroy_stack_node(stack_node* node, u64 stride) {
-    if (node->next == 0) {
-        memory_free(node->data, stride, MEMORY_TAG_STACK);
-        memory_free(node, sizeof(stack_node), MEMORY_TAG_STACK);
+    if (!node) {
         return;
     }
 

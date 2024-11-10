@@ -22,16 +22,4 @@
         return false;                                                                  \
     }
 
-#define expect_should_be_true(actual)                                           \
-    if (true != actual) {                                                       \
-        LOGE("expected true but got %lld , %s:%d", actual, __FILE__, __LINE__); \
-        return false;                                                           \
-    }
-
-#define expect_should_be_false(actual)                                           \
-    if (false != actual) {                                                       \
-        LOGE("expected false but got %lld , %s:%d", actual, __FILE__, __LINE__); \
-        return false;                                                            \
-    }
-
 #endif

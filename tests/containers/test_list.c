@@ -5,28 +5,28 @@
 
 // Test struct
 typedef struct {
-    int id;
-    float score;
+    i32 id;
+    f32 score;
     char name[32];
 } Student;
 
 // Comparison functions
-b8 compare_ints(const void* a, const void* b) {
-    return *(const int*)a <= *(const int*)b;
+b8 list_compare_ints(const void* a, const void* b) {
+    return *(const i32*)a <= *(const i32*)b;
 }
 
-b8 unique_ints(const void* a, const void* b) {
-    return *(const int*)a == *(const int*)b;
+b8 list_unique_ints(const void* a, const void* b) {
+    return *(const i32*)a == *(const i32*)b;
 }
 
-b8 compare_students_by_id(const void* a, const void* b) {
+b8 list_compare_students_by_id(const void* a, const void* b) {
     const Student* s1 = (const Student*)a;
     const Student* s2 = (const Student*)b;
     return s1->id <= s2->id;
 }
 
 u32 test_list_init() {
-    list* lst = list_create(int);
+    list* lst = list_create(i32);
 
     expect_should_be(0, list_size(lst));
 
@@ -35,19 +35,19 @@ u32 test_list_init() {
 }
 
 u32 test_list_push_back_ints() {
-    list* lst = list_create(int);
+    list* lst = list_create(i32);
 
     // Test pushing elements
-    int values[] = {1, 2, 3, 4, 5};
-    for (int i = 0; i < 5; i++) {
+    i32 values[] = {1, 2, 3, 4, 5};
+    for (i32 i = 0; i < 5; i++) {
         list_push_back(lst, &values[i]);
     }
 
     expect_should_be(5, list_size(lst));
 
     // Verify values in order
-    for (int i = 0; i < 5; i++) {
-        int* value = (int*)list_data(lst, i);
+    for (i32 i = 0; i < 5; i++) {
+        i32* value = (i32*)list_data(lst, i);
         expect_should_be(values[i], *value);
     }
 
@@ -56,17 +56,17 @@ u32 test_list_push_back_ints() {
 }
 
 u32 test_list_push_front_ints() {
-    list* lst = list_create(int);
+    list* lst = list_create(i32);
 
-    int values[] = {1, 2, 3};
-    for (int i = 0; i < 3; i++) {
+    i32 values[] = {1, 2, 3};
+    for (i32 i = 0; i < 3; i++) {
         list_push_front(lst, &values[i]);
     }
 
     expect_should_be(3, list_size(lst));
 
     // Values should be in reverse order due to push_front
-    int* first = (int*)list_data(lst, 0);
+    i32* first = (i32*)list_data(lst, 0);
     expect_should_be(3, *first);
 
     list_destroy(lst);
@@ -74,10 +74,10 @@ u32 test_list_push_front_ints() {
 }
 
 u32 test_list_pop_operations() {
-    list* lst = list_create(int);
+    list* lst = list_create(i32);
 
-    int values[] = {1, 2, 3, 4};
-    for (int i = 0; i < 4; i++) {
+    i32 values[] = {1, 2, 3, 4};
+    for (i32 i = 0; i < 4; i++) {
         list_push_back(lst, &values[i]);
     }
 
@@ -85,14 +85,14 @@ u32 test_list_pop_operations() {
     list_pop_back(lst);
     expect_should_be(3, list_size(lst));
 
-    int* last = (int*)list_data(lst, 2);
+    i32* last = (i32*)list_data(lst, 2);
     expect_should_be(3, *last);
 
     // Test pop_front
     list_pop_front(lst);
     expect_should_be(2, list_size(lst));
 
-    int* new_first = (int*)list_data(lst, 0);
+    i32* new_first = (i32*)list_data(lst, 0);
     expect_should_be(2, *new_first);
 
     list_destroy(lst);
@@ -100,26 +100,26 @@ u32 test_list_pop_operations() {
 }
 
 u32 test_list_insert_remove() {
-    list* lst = list_create(int);
+    list* lst = list_create(i32);
 
-    int values[] = {1, 2, 3};
-    for (int i = 0; i < 3; i++) {
+    i32 values[] = {1, 2, 3};
+    for (i32 i = 0; i < 3; i++) {
         list_push_back(lst, &values[i]);
     }
 
     // Test insert
-    int insert_val = 42;
+    i32 insert_val = 42;
     list_insert(lst, 1, &insert_val);
     expect_should_be(4, list_size(lst));
 
-    int* inserted = (int*)list_data(lst, 1);
+    i32* inserted = (i32*)list_data(lst, 1);
     expect_should_be(42, *inserted);
 
     // Test remove
     list_remove(lst, 1);
     expect_should_be(3, list_size(lst));
 
-    int* after_remove = (int*)list_data(lst, 1);
+    i32* after_remove = (i32*)list_data(lst, 1);
     expect_should_be(2, *after_remove);
 
     list_destroy(lst);
@@ -127,20 +127,20 @@ u32 test_list_insert_remove() {
 }
 
 u32 test_list_sort_ints() {
-    list* lst = list_create(int);
+    list* lst = list_create(i32);
 
-    int values[] = {5, 2, 8, 1, 9};
-    for (int i = 0; i < 5; i++) {
+    i32 values[] = {5, 2, 8, 1, 9};
+    for (i32 i = 0; i < 5; i++) {
         list_push_back(lst, &values[i]);
     }
 
-    list_sort(lst, compare_ints);
+    list_sort(lst, list_compare_ints);
 
     // Verify sorted order
-    int prev_val = -1;
-    for (int i = 0; i < 5; i++) {
-        int* curr = (int*)list_data(lst, i);
-        expect_should_be_true(*curr >= prev_val);
+    i32 prev_val = -1;
+    for (i32 i = 0; i < 5; i++) {
+        i32* curr = (i32*)list_data(lst, i);
+        expect_should_be(true, (*curr >= prev_val));
         prev_val = *curr;
     }
 
@@ -149,18 +149,18 @@ u32 test_list_sort_ints() {
 }
 
 u32 test_list_reverse_ints() {
-    list* lst = list_create(int);
+    list* lst = list_create(i32);
 
-    int values[] = {1, 2, 3, 4};
-    for (int i = 0; i < 4; i++) {
+    i32 values[] = {1, 2, 3, 4};
+    for (i32 i = 0; i < 4; i++) {
         list_push_back(lst, &values[i]);
     }
 
     list_reverse(lst);
 
     // Verify reversed order
-    for (int i = 0; i < 4; i++) {
-        int* value = (int*)list_data(lst, i);
+    for (i32 i = 0; i < 4; i++) {
+        i32* value = (i32*)list_data(lst, i);
         expect_should_be(values[3 - i], *value);
     }
 
@@ -169,22 +169,22 @@ u32 test_list_reverse_ints() {
 }
 
 u32 test_list_unique_ints() {
-    list* lst = list_create(int);
+    list* lst = list_create(i32);
 
     // Add duplicates
-    int values[] = {1, 1, 2, 2, 3, 3, 3};
-    for (int i = 0; i < 7; i++) {
+    i32 values[] = {1, 1, 2, 2, 3, 3, 3};
+    for (i32 i = 0; i < 7; i++) {
         list_push_back(lst, &values[i]);
     }
 
-    list_sort(lst, compare_ints);
-    list_unique(lst, unique_ints);
+    list_sort(lst, list_compare_ints);
+    list_unique(lst, list_unique_ints);
 
     expect_should_be(3, list_size(lst));
 
-    int* first = (int*)list_data(lst, 0);
-    int* second = (int*)list_data(lst, 1);
-    int* third = (int*)list_data(lst, 2);
+    i32* first = (i32*)list_data(lst, 0);
+    i32* second = (i32*)list_data(lst, 1);
+    i32* third = (i32*)list_data(lst, 2);
 
     expect_should_be(1, *first);
     expect_should_be(2, *second);
@@ -213,7 +213,7 @@ u32 test_list_struct_operations() {
     expect_float_should_be(85.5f, retrieved->score);
 
     // Test sorting structs
-    list_sort(lst, compare_students_by_id);
+    list_sort(lst, list_compare_students_by_id);
 
     Student* first = (Student*)list_data(lst, 0);
     Student* second = (Student*)list_data(lst, 1);
@@ -225,27 +225,27 @@ u32 test_list_struct_operations() {
 }
 
 u32 test_list_merge_operations() {
-    list* lst1 = list_create(int);
-    list* lst2 = list_create(int);
+    list* lst1 = list_create(i32);
+    list* lst2 = list_create(i32);
 
     // Create two sorted lists
-    int values1[] = {1, 3, 5};
-    int values2[] = {2, 4, 6};
+    i32 values1[] = {1, 3, 5};
+    i32 values2[] = {2, 4, 6};
 
-    for (int i = 0; i < 3; i++) {
+    for (i32 i = 0; i < 3; i++) {
         list_push_back(lst1, &values1[i]);
         list_push_back(lst2, &values2[i]);
     }
 
-    list_merge(lst1, lst2, compare_ints);
+    list_merge(lst1, lst2, list_compare_ints);
 
     expect_should_be(6, list_size(lst1));
 
     // Verify merged list is sorted
-    int prev_val = -1;
-    for (int i = 0; i < 6; i++) {
-        int* curr = (int*)list_data(lst1, i);
-        expect_should_be_true(*curr >= prev_val);
+    i32 prev_val = -1;
+    for (i32 i = 0; i < 6; i++) {
+        i32* curr = (i32*)list_data(lst1, i);
+        expect_should_be(true, (*curr >= prev_val));
         prev_val = *curr;
     }
 
@@ -255,7 +255,7 @@ u32 test_list_merge_operations() {
     return true;
 }
 
-void test_list_register() {
+void register_list_tests() {
 
     test_manager_register_test(test_list_init, "test_list_init");
     test_manager_register_test(test_list_push_back_ints, "test_list_push_back_ints");

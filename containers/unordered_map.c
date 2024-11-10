@@ -16,14 +16,16 @@ struct unordered_map {
     PFN_unordered_map_hash hash_func;
 };
 
+#define GENERATE_MAP_HASH(un_map, key) un_map->hash_func(key, un_map->key_stride) % un_map->cap
+
 unmap_node* create_unmap_node(const void* key, const void* data, u64 key_stride, u64 data_stride);
 void destroy_unmap_node(unmap_node* node, u64 key_stride, u64 data_stride);
-u64 default_unordered_hash(const void* key, u64 key_stride);
+u64 default_unordered_map_hash(const void* key, u64 key_stride);
 
 unordered_map* _unordered_map_create(u64 size, u64 key_stride, u64 data_stride, PFN_unordered_map_hash hash_func) {
 
     if (hash_func == 0) {
-        hash_func = default_unordered_hash;
+        hash_func = default_unordered_map_hash;
     }
 
     unordered_map* temp = (unordered_map*)memory_allocate(sizeof(unordered_map), MEMORY_TAG_UNORDERED_MAP);
@@ -49,14 +51,13 @@ void unordered_map_destroy(unordered_map* un_map) {
     memory_free(un_map, sizeof(unordered_map), MEMORY_TAG_UNORDERED_MAP);
 }
 
-void unordered_map_insert(unordered_map* un_map, const void* key, const void* data) {
+unordered_map* _unordered_map_insert(unordered_map* un_map, const void* key, const void* data) {
 
     if ((un_map->size / (f64)un_map->cap) >= UNORDERED_MAP_LOAD_FACTOR) {
-        unordered_map_resize(un_map);
+        un_map = unordered_map_resize(un_map);
     }
 
-    u64 hash = un_map->hash_func(key, un_map->key_stride);
-    hash = hash % un_map->cap;
+    u64 hash = GENERATE_MAP_HASH(un_map, key);
 
     if (un_map->array[hash] == 0) {
         unmap_node* node = create_unmap_node(key, data, un_map->key_stride, un_map->data_stride);
@@ -67,7 +68,7 @@ void unordered_map_insert(unordered_map* un_map, const void* key, const void* da
         while (curr) {
             if (memory_compare(curr->key, key, un_map->key_stride) == 0) {
                 memory_copy(curr->data, data, un_map->data_stride);
-                return;
+                return un_map;
             }
             prev = curr;
             curr = curr->next;
@@ -78,12 +79,12 @@ void unordered_map_insert(unordered_map* un_map, const void* key, const void* da
     }
 
     un_map->size += 1;
+    return un_map;
 }
 
 void* unordered_map_data(unordered_map* un_map, const void* key) {
 
-    u64 hash = un_map->hash_func(key, un_map->key_stride);
-    hash = hash % un_map->cap;
+    u64 hash = GENERATE_MAP_HASH(un_map, key);
 
     unmap_node* node = un_map->array[hash];
 
@@ -101,8 +102,7 @@ void* unordered_map_data(unordered_map* un_map, const void* key) {
 
 void unordered_map_remove(unordered_map* un_map, const void* key) {
 
-    u64 hash = un_map->hash_func(key, un_map->key_stride);
-    hash = hash % un_map->cap;
+    u64 hash = GENERATE_MAP_HASH(un_map, key);
 
     unmap_node* node = un_map->array[hash];
 
@@ -130,7 +130,7 @@ void unordered_map_remove(unordered_map* un_map, const void* key) {
     LOGW("unordered_map_data : invalid key");
 }
 
-void unordered_map_resize(unordered_map* un_map) {
+unordered_map* unordered_map_resize(unordered_map* un_map) {
 
     unordered_map* temp = _unordered_map_create(UNORDERED_MAP_RESIZE_FACTOR * un_map->cap,
                                                 un_map->key_stride, un_map->data_stride, un_map->hash_func);
@@ -140,13 +140,14 @@ void unordered_map_resize(unordered_map* un_map) {
             unmap_node* node = un_map->array[i];
 
             while (node) {
-                unordered_map_insert(temp, node->key, node->data);
+                _unordered_map_insert(temp, node->key, node->data);
                 node = node->next;
             }
         }
     }
+
     unordered_map_destroy(un_map);
-    un_map = temp;
+    return temp;
 }
 
 u64 unordered_map_size(unordered_map* un_map) {
@@ -155,6 +156,21 @@ u64 unordered_map_size(unordered_map* un_map) {
 
 u64 unordered_map_capacity(unordered_map* un_map) {
     return un_map->cap;
+}
+
+bool unordered_map_contains(unordered_map* un_map, const void* key) {
+    u64 hash = GENERATE_MAP_HASH(un_map, key);
+
+    unmap_node* node = un_map->array[hash];
+
+    while (node) {
+        if (memory_compare(node->key, key, un_map->key_stride) == 0) {
+
+            return true;
+        }
+        node = node->next;
+    }
+    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -174,10 +190,8 @@ unmap_node* create_unmap_node(const void* key, const void* data, u64 key_stride,
 }
 
 void destroy_unmap_node(unmap_node* node, u64 key_stride, u64 data_stride) {
-    if (!node->next) {
-        memory_free(node->key, key_stride, MEMORY_TAG_UNORDERED_MAP);
-        memory_free(node->data, data_stride, MEMORY_TAG_UNORDERED_MAP);
-        memory_free(node, sizeof(unmap_node), MEMORY_TAG_UNORDERED_MAP);
+
+    if (!node) {
         return;
     }
 
@@ -189,7 +203,7 @@ void destroy_unmap_node(unmap_node* node, u64 key_stride, u64 data_stride) {
     return;
 }
 
-u64 default_unordered_hash(const void* key, u64 key_stride) {
+u64 default_unordered_map_hash(const void* key, u64 key_stride) {
 
     u64 seed = 0xCBF29CE484222325ULL; // Example: 64-bit FNV offset basis
 

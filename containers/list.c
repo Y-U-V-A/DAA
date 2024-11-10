@@ -297,9 +297,8 @@ list_node* create_list_node(const void* data, u64 stride) {
 }
 
 void destroy_list_node(list_node* node, u64 stride) {
-    if (!node->next) {
-        memory_free(node->data, stride, MEMORY_TAG_LIST);
-        memory_free(node, sizeof(list_node), MEMORY_TAG_LIST);
+
+    if (!node) {
         return;
     }
 

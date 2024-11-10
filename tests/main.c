@@ -5,24 +5,36 @@
 #include "containers/test_queue.h"
 #include "containers/test_priority_queue.h"
 #include "containers/test_unordered_map.h"
+#include "containers/test_map.h"
+#include "containers/test_unordered_set.h"
+#include "containers/test_set.h"
 
 #include "common.h"
 
+// ** TESTS ARE GENERATED USING AI **
+
 int main() {
 
+    // init
     test_manager_init();
 
     // register;
-    test_darray_register();
-    test_list_register();
-    test_stack_register();
-    test_queue_register();
-    test_priority_queue_register();
-    test_unordered_map_register();
+    register_darray_tests();
+    register_list_tests();
+    register_stack_tests();
+    register_queue_tests();
+    register_priority_queue_tests();
+    register_map_tests();
+    register_unordered_map_tests();
+    register_set_tests();
+    register_unordered_set_tests();
 
+    // run
     test_manager_run();
 
+    // destroy
     test_manager_destroy();
 
+    // log mem state
     memory_state_log();
 }

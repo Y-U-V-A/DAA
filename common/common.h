@@ -6,13 +6,14 @@
 // TODO: dont forget to change string
 typedef enum memory_tag {
     MEMORY_TAG_DARRAY,
-    MEMORY_TAG_NODE,
     MEMORY_TAG_LIST,
     MEMORY_TAG_STACK,
     MEMORY_TAG_QUEUE,
     MEMORY_TAG_PRIORITY_QUEUE,
     MEMORY_TAG_UNORDERED_MAP,
     MEMORY_TAG_MAP,
+    MEMORY_TAG_UNORDERED_SET,
+    MEMORY_TAG_SET,
     MEMORY_TAG_ALGORITHM,
 
     MEMORY_TAG_MAX,
@@ -55,6 +56,8 @@ i32 memory_compare(const void* block1, const void* block2, u64 size);
 i32 string_compare(const char* str1, const char* str2);
 
 u64 string_length(const char* str);
+
+i32 string_copy(char* dest, const char* src, u64 size);
 
 void string_format(char* buffer, u64 buffer_size, const char* fmt, ...);
 

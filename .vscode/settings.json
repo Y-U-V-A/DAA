@@ -23,7 +23,7 @@
         {
             "text": "TODO:",
             "backgroundColor": "#272B33",
-            "color": "#00FF00",
+            "color": "#FF6700",
             "overviewRulerColor": "#FFB347"
         }
     ],
@@ -73,6 +73,9 @@
         "next_greater.h": "c",
         "next_smaller.h": "c",
         "kth_largest.h": "c",
-        "test_unordered_map.h": "c"
+        "test_unordered_map.h": "c",
+        "map.h": "c",
+        "unordered_set.h": "c",
+        "cstdlib": "c"
     },
 }

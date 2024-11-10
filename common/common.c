@@ -87,6 +87,10 @@ i32 string_compare(const char* str1, const char* str2) {
     return strcmp(str1, str2);
 }
 
+i32 string_copy(char* dest, const char* src, u64 size) {
+    return strcpy_s(dest, size, src);
+}
+
 u64 string_length(const char* str) {
     return strlen(str);
 }
@@ -113,13 +117,14 @@ f64 get_time() {
 
 const char* mem_str[] = {
     "DARRAY               ",
-    "NODE                 ",
     "LIST                 ",
     "STACK                ",
     "QUEUE                ",
     "PRIORITY_QUEUE       ",
     "UNORDERED_MAP        ",
     "MAP                  ",
+    "UNORDERED_SET        ",
+    "SET                  ",
     "ALGORITHM            ",
 };
 
@@ -129,7 +134,7 @@ void memory_state_log() {
     u32 mb = 1024 * 1024;
     u32 gb = 1024 * 1024 * 1024;
 
-    const u64 buffer_size = 2000;
+    static const int buffer_size = 1000;
     char buffer[buffer_size] = {0};
 
     u32 offset = 0;
@@ -157,7 +162,8 @@ void memory_state_log() {
         u32 written = (u32)snprintf(buffer + offset, buffer_size - offset, "%s:%lf%s\n", mem_str[i], ammount, str);
         offset += written;
     }
-    LOGD("tagged memory allocations... \n%s", buffer);
+
+    LOGD("tagged memory allocations... \n%s\ntotal bytes allocated = %lu", buffer, state.total_allocation);
 }
 
 void seed_random() {
