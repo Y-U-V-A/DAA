@@ -1,7 +1,7 @@
 #include "test_manager.h"
 #include "darray.h"
 #include "clock.h"
-#include "common.h"
+#include "logger.h"
 
 typedef struct test_entry {
     PFN_test func;
@@ -50,7 +50,7 @@ void test_manager_run() {
 
         u32 result = test_manager[i].func();
 
-        clock_end(&clk);
+        clock_update(&clk);
 
         if (result == false) {
 
@@ -70,7 +70,7 @@ void test_manager_run() {
         // memory_state_log();
     }
 
-    clock_end(&clk_total);
+    clock_update(&clk_total);
 
     LOGD("testing ended...");
     LOGD("testing result / total = %u / passed = %u / failed = %u / skipped = %u / total_time_s = %lf",

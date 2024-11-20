@@ -2,6 +2,7 @@
 #include "expect.h"
 #include "test_manager.h"
 #include "set.h"
+#include "common.h"
 
 typedef struct {
     i32 id;
@@ -10,15 +11,15 @@ typedef struct {
 } TestStruct;
 
 // Comparison functions for different types
-b8 set_int_compare(const void* a, const void* b) {
+bool set_int_compare(const void* a, const void* b) {
     return *(const i32*)a > *(const i32*)b;
 }
 
-b8 set_float_compare(const void* a, const void* b) {
+bool set_float_compare(const void* a, const void* b) {
     return *(const f32*)a > *(const f32*)b;
 }
 
-b8 set_struct_compare(const void* a, const void* b) {
+bool set_struct_compare(const void* a, const void* b) {
     return ((const TestStruct*)a)->id > ((const TestStruct*)b)->id;
 }
 

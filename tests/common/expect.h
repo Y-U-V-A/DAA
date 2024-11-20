@@ -1,8 +1,7 @@
 #ifndef EXPECT_H
 #define EXPECT_H
 
-#include "defines.h"
-#include "common.h"
+#include "logger.h"
 
 #define expect_should_be(expected, actual)                                                \
     if (expected != actual) {                                                             \

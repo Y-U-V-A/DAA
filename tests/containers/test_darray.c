@@ -3,8 +3,6 @@
 #include "expect.h"
 #include "darray.h"
 
-#include "common.h"
-
 typedef struct {
     i32 x;
     f32 y;

@@ -1,8 +1,8 @@
 #include "test_map.h"
 #include "expect.h"
 #include "test_manager.h"
-#include "common.h"
 #include "map.h"
+#include "common.h"
 
 typedef struct {
     i32 id;
@@ -11,15 +11,15 @@ typedef struct {
 } TestStruct;
 
 // Comparison functions for different types
-b8 map_int_compare(const void* a, const void* b) {
+bool map_int_compare(const void* a, const void* b) {
     return *(const i32*)a > *(const i32*)b;
 }
 
-b8 map_float_compare(const void* a, const void* b) {
+bool map_float_compare(const void* a, const void* b) {
     return *(const f32*)a > *(const f32*)b;
 }
 
-b8 map_struct_compare(const void* a, const void* b) {
+bool map_struct_compare(const void* a, const void* b) {
     return ((const TestStruct*)a)->id > ((const TestStruct*)b)->id;
 }
 

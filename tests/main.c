@@ -9,11 +9,16 @@
 #include "containers/test_unordered_set.h"
 #include "containers/test_set.h"
 
+#include "logger.h"
 #include "common.h"
 
 // ** TESTS ARE GENERATED USING AI **
 
 int main() {
+
+    logger_init(1024 * 1024); // 1mb
+
+    memory_state_log();
 
     // init
     test_manager_init();
@@ -37,4 +42,6 @@ int main() {
 
     // log mem state
     memory_state_log();
+
+    logger_shutdown();
 }

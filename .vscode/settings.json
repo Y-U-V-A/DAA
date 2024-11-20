@@ -76,6 +76,9 @@
         "test_unordered_map.h": "c",
         "map.h": "c",
         "unordered_set.h": "c",
-        "cstdlib": "c"
+        "cstdlib": "c",
+        "kth_smallest.h": "c",
+        "logger.h": "c",
+        "random": "c"
     },
 }

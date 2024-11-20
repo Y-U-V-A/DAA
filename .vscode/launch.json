@@ -8,7 +8,7 @@
             "type": "lldb",
             "request": "launch",
             "name": "Debug",
-            "program": "${workspaceFolder}/bin/bin.exe",
+            "program": "${workspaceFolder}/bin/DAA.exe",
             "args": [],
             "cwd": "${workspaceFolder}",
             "console": "externalTerminal",

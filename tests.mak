@@ -1,55 +1,92 @@
 
-INCLUDE_DIRS = common containers tests tests/common tests/containers
+INCLDIRS = core core/common core/containers core/platform tests tests/common tests/containers
 
-CODE_DIRS = common containers tests tests/common tests/containers
+CODEDIRS = core core/common core/containers core/platform tests tests/common tests/containers
 
-
-#bin dir
-BIN_DIR = bin
-#bin_obj dir
-OBJ_DIR = bin_int/tests
 
 #compiler
 CC = clang
-#optimization
+#optmization level
 OP = -O0
+#defines
+DEFINES = 
+#linker flags
+LFLAGS = -fsanitize=address 
 #compiler flags
-#-std=gnu17: Uses the C17 standard with GNU extensions.
-CCFLAGS = -Wall -Wextra -MD -g -std=gnu17 $(OP) $(foreach K,$(INCLUDE_DIRS), -I$(K))
+CFLAGS = -Wextra -Wall -fsanitize=address -g -std=gnu17 -MD  $(OP) $(DEFINES) $(foreach dir,$(INCLDIRS),-I$(dir))
 
-CFILES = $(foreach K,$(CODE_DIRS),$(wildcard $(K)/*.c))
-OFILES = $(patsubst %.c,$(OBJ_DIR)/%.o,$(CFILES))
-DFILES = $(patsubst %.c,$(OBJ_DIR)/%.d,$(CFILES))
-TARGET = $(BIN_DIR)/bin.exe
 
-tests:$(TARGET)
+ifeq ($(OS),Windows_NT)
+	PLATFORM = Windows
+else 
+	PLATFORM = $(shell uname -s)
+endif
+#gets name of os $(shell -uname -s)
+
+#bin dir
+BINDIR = bin
+
+#object dir
+OBJDIR = bin.int/tests.$(PLATFORM)
+
+#/Q dont ask 
+#/S recursive
+ifeq ($(PLATFORM),Windows)
+	STEP = \\$(nullstring)
+	RM = del /Q /S
+	MKDIR = mkdir
+	EXE = .exe
+else
+	ifeq ($(PLATFORM),Linux)
+		STEP = /
+		RM = rm
+		MKDIR = mkdir -p
+		EXE =
+	else
+		$(error This Makefile is not compatible with the OS)
+	endif
+endif
+
+
+
+CFILES = $(foreach K,$(CODEDIRS),$(wildcard $(K)/*.c))
+OFILES = $(patsubst %.c,$(OBJDIR)/%.o,$(CFILES))
+DFILES = $(patsubst %.c,$(OBJDIR)/%.d,$(CFILES))
+
+TARGET = $(BINDIR)/DAA$(EXE)
+
+.PHONY:all clean
+
+all:make_dirs $(TARGET)
+	@echo "Done..."
+
+make_dirs:
+ifeq ($(PLATFORM),Windows)
+	@if not exist $(subst /,$(STEP),$(BINDIR)) $(MKDIR) $(subst /,$(STEP),$(BINDIR))
+	@if not exist $(subst /,$(STEP),$(OBJDIR)) $(MKDIR) $(subst /,$(STEP),$(OBJDIR))
+else
+	@$(MKDIR) $(BINDIR)
+	@$(MKDIR) $(OBJDIR)
+endif
 
 $(TARGET):$(OFILES)
 	@echo "linking..."
-	@if not exist $(subst /,\,$(BIN_DIR)) mkdir $(subst /,\,$(BIN_DIR))
-	@$(CC) -fsanitize=address $^ -o $@
-	@echo "Done..."
+	@$(CC) $(LFLAGS) $^ -o $@
 
-$(OBJ_DIR)/%.o:%.c
-	@if not exist $(subst /,\,$(OBJ_DIR)) mkdir $(subst /,\,$(OBJ_DIR))
-	@if not exist $(subst /,\,$(dir $@)) mkdir $(subst /,\,$(dir $@))
-	@$(CC) $(CCFLAGS) -fsanitize=address -c $< -o $@
-	@echo "compiled $(notdir $<)"
-	
+$(OBJDIR)/%.o:%.c
+ifeq ($(PLATFORM),Windows)
+	@if not exist $(subst /,$(STEP),$(dir $@)) $(MKDIR) $(subst /,$(STEP),$(dir $@))
+else
+	@$(MKDIR) $(dir $@)
+endif
+	@$(CC) $(CFLAGS) -c $< -o $@
+	@echo "compiled $<"
 
-
--include $(DFILES) #include dependency files to detect change dont forget
-
+# '-' symbol makes it optional , doesnt give any error if file is not avaliable
+-include $(DFILES)
 
 clean:
-	@del /Q /S $(subst /,\,$(OBJ_DIR))
-	@del /Q /S $(subst /,\,$(BIN_DIR)/bin.exe)
-	@del /Q /S $(subst /,\,$(BIN_DIR)/bin.pdb)
-	@del /Q /S $(subst /,\,$(BIN_DIR)/bin.lib)
-	@del /Q /S $(subst /,\,$(BIN_DIR)/bin.exp)
-
-print:
-	@echo "$(CFILES)"
-	@echo "$(OFILES)"
-
+	@$(RM) $(subst /,$(STEP),$(OFILES))
+	@$(RM) $(subst /,$(STEP),$(DFILES))
+	@$(RM) $(subst /,$(STEP),$(BINDIR))
 

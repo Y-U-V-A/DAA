@@ -3,7 +3,7 @@
 #include "test_manager.h"
 #include "priority_queue.h"
 
-b8 prio_que_int_compare(const void* parent, const void* child) {
+bool prio_que_int_compare(const void* parent, const void* child) {
     return *(const i32*)parent >= *(const i32*)child;
 }
 
@@ -14,7 +14,7 @@ typedef struct TestItem {
 } TestItem;
 
 // Compare function for TestItem (max heap based on priority)
-b8 prio_que_item_compare(const void* parent, const void* child) {
+bool prio_que_item_compare(const void* parent, const void* child) {
     const TestItem* p = (const TestItem*)parent;
     const TestItem* c = (const TestItem*)child;
     return p->priority >= c->priority;
