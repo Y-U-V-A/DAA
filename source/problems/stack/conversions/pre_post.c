@@ -46,7 +46,7 @@ void pre_post(const char* pre_exp, char* post_exp) {
 
 void pre_post_run() {
 
-    const char* exps[] = {
+    static const char* exps[] = {
         "-+a*b^-^cde+f*ghi",
         "*+pq-mn",
         "*+ab-cd",
@@ -71,7 +71,7 @@ void pre_post_run() {
         "-*/+ABCDE",
     };
 
-    const char* results[] = {
+    static const char* results[] = {
         "abcd^e-fgh*+^*+i-",
         "pq+mn-*",
         "ab+cd-*",

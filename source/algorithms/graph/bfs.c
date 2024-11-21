@@ -38,7 +38,7 @@ void bfs(const u32 nodes, const u8** graph, u32* out_bfs) {
     queue_destroy(que);
 }
 
-void bfs_run() {
+void bfs_run(const u32 buffer_size) {
 
     LOGD("running bfs ");
     i32 n;
@@ -63,8 +63,7 @@ void bfs_run() {
         graph[i] = (u8*)memory_allocate(max_nodes * sizeof(u8), MEMORY_TAG_ALGORITHM);
     }
 
-    const u32 buff_size = 1024 * 1024; // 1 mb
-    char* buffer = memory_allocate(buff_size * sizeof(char), MEMORY_TAG_UNKNOWN);
+    char* buffer = memory_allocate(buffer_size * sizeof(char), MEMORY_TAG_UNKNOWN);
 
     for (i32 i = 0; i < n; ++i) {
 
@@ -83,23 +82,23 @@ void bfs_run() {
 
         clock_update(&clk);
 
-        u32 offset = log_buffer(buffer, buff_size, "graph of nodes = %u  \n", nodes);
+        u32 offset = log_buffer(buffer, buffer_size, "graph of nodes = %u  \n", nodes);
 
         for (u32 i = 0; i < nodes; ++i) {
             for (u32 j = 0; j < nodes; ++j) {
 
-                offset += log_buffer(buffer + offset, buff_size - offset, " %u ", graph[i][j]);
+                offset += log_buffer(buffer + offset, buffer_size - offset, " %u ", graph[i][j]);
             }
-            offset += log_buffer(buffer + offset, buff_size - offset, "\n");
+            offset += log_buffer(buffer + offset, buffer_size - offset, "\n");
         }
 
-        offset += log_buffer(buffer + offset, buff_size - offset, "bfs = ");
+        offset += log_buffer(buffer + offset, buffer_size - offset, "bfs = ");
 
         for (u32 i = 0; i < nodes; ++i) {
-            offset += log_buffer(buffer + offset, buff_size - offset, " %u ", array[i]);
+            offset += log_buffer(buffer + offset, buffer_size - offset, " %u ", array[i]);
         }
 
-        offset += log_buffer(buffer + offset, buff_size - offset, "\ntime = %lfs", clk.elapsed);
+        offset += log_buffer(buffer + offset, buffer_size - offset, "\ntime = %lfs", clk.elapsed);
         buffer[offset++] = '\n';
         buffer[offset++] = '\0';
 
@@ -112,7 +111,7 @@ void bfs_run() {
         memory_free(graph[i], max_nodes * sizeof(u8), MEMORY_TAG_ALGORITHM);
     }
     memory_free(graph, max_nodes * sizeof(u8*), MEMORY_TAG_ALGORITHM);
-    memory_free(buffer, buff_size * sizeof(char), MEMORY_TAG_UNKNOWN);
+    memory_free(buffer, buffer_size * sizeof(char), MEMORY_TAG_UNKNOWN);
 
     LOGD("total time_s taken %lfs\n", clk.elapsed);
 }

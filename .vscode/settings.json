@@ -79,6 +79,7 @@
         "cstdlib": "c",
         "kth_smallest.h": "c",
         "logger.h": "c",
-        "random": "c"
+        "random": "c",
+        "defines.h": "c"
     },
 }

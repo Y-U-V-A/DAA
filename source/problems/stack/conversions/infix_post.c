@@ -59,7 +59,7 @@ void infix_post(const char* infix_exp, char* post_exp) {
 
 void infix_post_run() {
 
-    const char* exps[] = {
+    static const char* exps[] = {
         "a + b * (c ^ d - e) ^ (f + g * h) - i",
         "(p + q) * (m - n)",
         "(a + b) * (c - d)",
@@ -84,7 +84,7 @@ void infix_post_run() {
         "(A + B) / C * D - E",
     };
 
-    const char* results[] = {
+    static const char* results[] = {
         "abcd^e-fgh*+^*+i-",
         "pq+mn-*",
         "ab+cd-*",

@@ -1,6 +1,8 @@
 #ifndef KTH_SMALLEST_H
 #define KTH_SMALLEST_H
 
-void kth_smallest_run();
+#include "defines.h"
+
+void kth_smallest_run(const u32 buffer_size);
 
 #endif

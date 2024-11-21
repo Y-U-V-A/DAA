@@ -8,7 +8,7 @@ int main() {
 
     memory_state_log();
 
-    merge_run();
+    merge_run(1024);
 
     memory_state_log();
 

@@ -18,7 +18,7 @@ void selection_sort(i32* array, i32 n) {
     }
 }
 
-void selection_run() {
+void selection_run(const u32 buffer_size) {
 
     LOGD("running selection sort... ");
 
@@ -31,8 +31,7 @@ void selection_run() {
 
     seed_random();
 
-    const i32 buff_size = 1024;
-    char buffer[buff_size];
+    char* buffer = memory_allocate(buffer_size * sizeof(char), MEMORY_TAG_ALGORITHM);
 
     const i32 n = 30;
     i32 array[n];
@@ -53,11 +52,11 @@ void selection_run() {
 
         clock_update(&clk);
 
-        u32 offset = log_buffer(buffer, buff_size, "time = %lfs , sorted array = ", clk.elapsed);
+        u32 offset = log_buffer(buffer, buffer_size, "time = %lfs , sorted array = ", clk.elapsed);
 
         for (i32 i = 0; i < n; ++i) {
 
-            offset += log_buffer(buffer + offset, buff_size - offset, "%d,", array[i]);
+            offset += log_buffer(buffer + offset, buffer_size - offset, "%d,", array[i]);
         }
 
         buffer[offset++] = '\n';
@@ -67,6 +66,8 @@ void selection_run() {
     }
 
     clock_update(&clk);
+
+    memory_free(buffer, buffer_size * sizeof(char), MEMORY_TAG_ALGORITHM);
 
     LOGD("total time_s taken %lf\n", clk.elapsed);
 }

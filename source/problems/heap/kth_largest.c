@@ -33,25 +33,23 @@ i32 kth_largest(i32* arr, i32 n, i32 k) {
     return result;
 }
 
-void kth_largest_run() {
+void kth_largest_run(const u32 buffer_size) {
 
     seed_random();
 
     const i32 n = generate_random(30);
     i32 arr[n];
 
-    const i32 buffer_size = 1000;
-    char buffer[buffer_size];
+    char* buffer = memory_allocate(buffer_size * sizeof(char), MEMORY_TAG_ALGORITHM);
 
     u32 offset = log_buffer(buffer, buffer_size, "size = %d ,array = ", n);
 
     for (i32 i = 0; i < n; ++i) {
         arr[i] = generate_random(200);
-
-        u32 x = log_buffer(buffer + offset, buffer_size - offset, "%d,", arr[i]);
-        offset += x;
+        offset += log_buffer(buffer + offset, buffer_size - offset, "%d,", arr[i]);
     }
-    buffer[offset] = '\0';
+    buffer[offset++] = '\n';
+    buffer[offset++] = '\0';
     LOGI("%s", buffer);
 
     i32 times = generate_random(n);
@@ -60,4 +58,6 @@ void kth_largest_run() {
         i32 result = kth_largest(arr, n, k);
         LOGI("%dth largest = %d", k, result);
     }
+
+    memory_free(buffer, buffer_size * sizeof(char), MEMORY_TAG_ALGORITHM);
 }

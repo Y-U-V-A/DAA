@@ -45,7 +45,7 @@ void pre_infix(const char* pre_exp, char* infix_exp) {
 
 void pre_infix_run() {
 
-    const char* results[] = {
+    static const char* results[] = {
         "((a + (b * (((c ^ d) - e) ^ (f + (g * h))))) - i)",
         "((p + q) * (m - n))",
         "((a + b) * (c - d))",
@@ -70,7 +70,7 @@ void pre_infix_run() {
         "((((A + B) / C) * D) - E)",
     };
 
-    const char* exps[] = {
+    static const char* exps[] = {
         "-+a*b^-^cde+f*ghi",
         "*+pq-mn",
         "*+ab-cd",

@@ -46,7 +46,7 @@ void merge_sort(i32* arr, i32 s, i32 e) {
     darray_destroy(temp);
 }
 
-void merge_run() {
+void merge_run(const u32 buffer_size) {
 
     LOGD("running merge sort... ");
 
@@ -62,8 +62,7 @@ void merge_run() {
     const i32 n = 30;
     i32 array[n];
 
-    const i32 buff_size = 1024;
-    char buffer[buff_size];
+    char* buffer = memory_allocate(buffer_size * sizeof(char), MEMORY_TAG_ALGORITHM);
 
     clock clk;
     clock_start(&clk);
@@ -81,11 +80,11 @@ void merge_run() {
 
         clock_update(&clk);
 
-        u32 offset = log_buffer(buffer, buff_size, "time = %lfs , sorted array = ", clk.elapsed);
+        u32 offset = log_buffer(buffer, buffer_size, "time = %lfs , sorted array = ", clk.elapsed);
 
         for (i32 i = 0; i < n; ++i) {
 
-            offset += log_buffer(buffer + offset, buff_size - offset, "%d,", array[i]);
+            offset += log_buffer(buffer + offset, buffer_size - offset, "%d,", array[i]);
         }
 
         buffer[offset++] = '\n';
@@ -95,6 +94,8 @@ void merge_run() {
     }
 
     clock_update(&clk);
+
+    memory_free(buffer, buffer_size * sizeof(char), MEMORY_TAG_ALGORITHM);
 
     LOGD("total time_s taken %lf\n", clk.elapsed);
 }

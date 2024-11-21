@@ -1,6 +1,8 @@
 #ifndef QUICK_H
 #define QUICK_H
 
-void quick_run();
+#include "defines.h"
+
+void quick_run(const u32 buffer_size);
 
 #endif

@@ -1,0 +1,4 @@
+bin.int/source.Windows/source/main.o: \
+  C:\Program\ Files\LLVM\lib\clang\18\share\asan_ignorelist.txt \
+  source\main.c source\algorithms\sorting\merge.h core\common\defines.h \
+  core\common\logger.h core\common\common.h
