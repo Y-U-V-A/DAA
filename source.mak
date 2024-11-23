@@ -10,30 +10,14 @@ source/problems/stack/conversions\
 source/problems/heap\
 
 
-#compiler
-CC = clang
-#optmization level
-OP = -O0
-#defines
-DEFINES = 
-#linker flags
-LFLAGS = -fsanitize=address 
-#compiler flags
-CFLAGS = -Wextra -Wall -fsanitize=address -g -std=gnu17 -MD  $(OP) $(DEFINES) $(foreach dir,$(INCLDIRS),-I$(dir))
-
-
+#platform detection
 ifeq ($(OS),Windows_NT)
 	PLATFORM = Windows
 else 
 	PLATFORM = $(shell uname -s)
 endif
-#gets name of os $(shell -uname -s)
-
-#bin dir
-BINDIR = bin
-
-#object dir
-OBJDIR = bin.int/source.$(PLATFORM)
+#gets name of OS in windows $(OS)
+#gets name of OS  in linux $(shell -uname -s)
 
 #/Q dont ask 
 #/S recursive
@@ -41,26 +25,54 @@ ifeq ($(PLATFORM),Windows)
 	STEP = \\$(nullstring)
 	RM = del /Q /S
 	MKDIR = mkdir
-	EXE = .exe
 else
 	ifeq ($(PLATFORM),Linux)
 		STEP = /
 		RM = rm
 		MKDIR = mkdir -p
-		EXE =
 	else
 		$(error This Makefile is not compatible with the OS)
 	endif
 endif
 
 
+#compiler
+CC = clang
 
+#optmization level
+OP = -O0
+
+#defines
+DEFINES = 
+
+#compiler flags
+CFLAGS = -Wextra -Wall -fsanitize=address -g -std=gnu17 -MD  $(OP) $(DEFINES) $(foreach dir,$(INCLDIRS),-I$(dir))
+
+#bin dir
+BINDIR = bin
+
+#object dir
+OBJDIR = bin.int/source.$(PLATFORM)
+
+#linker flags
+LFLAGS = -fsanitize=address
+
+#target file
+ifeq ($(PLATFORM),Windows)
+	TARGET = $(BINDIR)/DAA.exe
+endif
+ifeq ($(PLATFORM),Linux)
+	TARGET = $(BINDIR)/DAA
+endif
+
+#code path/file names
 CFILES = $(foreach K,$(CODEDIRS),$(wildcard $(K)/*.c))
+#object path/file names
 OFILES = $(patsubst %.c,$(OBJDIR)/%.o,$(CFILES))
+#dependency path/file names
 DFILES = $(patsubst %.c,$(OBJDIR)/%.d,$(CFILES))
 
-TARGET = $(BINDIR)/DAA$(EXE)
-
+#Forces Make to run these targets even if files with these names exist
 .PHONY:all clean
 
 all:make_dirs $(TARGET)
@@ -70,7 +82,8 @@ make_dirs:
 ifeq ($(PLATFORM),Windows)
 	@if not exist $(subst /,$(STEP),$(BINDIR)) $(MKDIR) $(subst /,$(STEP),$(BINDIR))
 	@if not exist $(subst /,$(STEP),$(OBJDIR)) $(MKDIR) $(subst /,$(STEP),$(OBJDIR))
-else
+endif
+ifeq ($(PLATFORM),Linux)
 	@$(MKDIR) $(BINDIR)
 	@$(MKDIR) $(OBJDIR)
 endif
@@ -82,7 +95,8 @@ $(TARGET):$(OFILES)
 $(OBJDIR)/%.o:%.c
 ifeq ($(PLATFORM),Windows)
 	@if not exist $(subst /,$(STEP),$(dir $@)) $(MKDIR) $(subst /,$(STEP),$(dir $@))
-else
+endif
+ifeq ($(PLATFORM),Linux)
 	@$(MKDIR) $(dir $@)
 endif
 	@$(CC) $(CFLAGS) -c $< -o $@
@@ -94,4 +108,3 @@ endif
 clean:
 	@$(RM) $(subst /,$(STEP),$(OFILES))
 	@$(RM) $(subst /,$(STEP),$(DFILES))
-	@$(RM) $(subst /,$(STEP),$(BINDIR))
