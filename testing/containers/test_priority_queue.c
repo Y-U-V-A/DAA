@@ -25,7 +25,7 @@ u32 test_priority_queue_basic_operations() {
     priority_queue* pq = _priority_queue_create(sizeof(i32), prio_que_int_compare);
 
     // Test initial size
-    expect_should_be(0, priority_queue_size(pq));
+    expect_should_be(0, priority_queue_length(pq));
 
     // Push some values
     i32 values[] = {5, 3, 8, 1, 2};
@@ -34,7 +34,7 @@ u32 test_priority_queue_basic_operations() {
     }
 
     // Test size after pushing
-    expect_should_be(5, priority_queue_size(pq));
+    expect_should_be(5, priority_queue_length(pq));
 
     // Test top value (should be 8 as it's a max heap)
     i32* top = (i32*)priority_queue_top(pq);
@@ -49,7 +49,7 @@ u32 test_priority_queue_basic_operations() {
     }
 
     // Test final size
-    expect_should_be(0, priority_queue_size(pq));
+    expect_should_be(0, priority_queue_length(pq));
 
     priority_queue_destroy(pq);
     return true;
@@ -60,7 +60,7 @@ u32 test_priority_queue_struct_operations() {
     priority_queue* pq = _priority_queue_create(sizeof(TestItem), prio_que_item_compare);
 
     // Test initial size
-    expect_should_be(0, priority_queue_size(pq));
+    expect_should_be(0, priority_queue_length(pq));
 
     // Create test items
     TestItem items[] = {
@@ -76,7 +76,7 @@ u32 test_priority_queue_struct_operations() {
     }
 
     // Test size after pushing
-    expect_should_be(5, priority_queue_size(pq));
+    expect_should_be(5, priority_queue_length(pq));
 
     // Test top item (should be priority 5)
     TestItem* top = (TestItem*)priority_queue_top(pq);
@@ -93,7 +93,7 @@ u32 test_priority_queue_struct_operations() {
     }
 
     // Test final size
-    expect_should_be(0, priority_queue_size(pq));
+    expect_should_be(0, priority_queue_length(pq));
 
     priority_queue_destroy(pq);
     return true;

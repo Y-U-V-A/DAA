@@ -1,24 +1,27 @@
-#include "common/test_manager.h"
-#include "containers/test_darray.h"
-#include "containers/test_list.h"
-#include "containers/test_stack.h"
-#include "containers/test_queue.h"
-#include "containers/test_priority_queue.h"
-#include "containers/test_unordered_map.h"
-#include "containers/test_map.h"
-#include "containers/test_unordered_set.h"
-#include "containers/test_set.h"
+#include "test_manager.h"
+#include "test_darray.h"
+#include "test_list.h"
+#include "test_stack.h"
+#include "test_queue.h"
+#include "test_priority_queue.h"
+#include "test_unordered_map.h"
+#include "test_map.h"
+#include "test_unordered_set.h"
+#include "test_set.h"
+#include "testing_linear_allocator.h"
+#include "testing_freelist_allocator.h"
 
 #include "logger.h"
-#include "common.h"
+#include "zmemory.h"
 
 // ** TESTS ARE GENERATED USING AI **
 
 int main() {
 
-    logger_init(1024 * 1024); // 1mb
+    zmemory_init();
+    zmemory_log();
 
-    memory_state_log();
+    logger_init(1024 * 1024); // 1mb
 
     // init
     test_manager_init();
@@ -33,6 +36,8 @@ int main() {
     register_unordered_map_tests();
     register_set_tests();
     register_unordered_set_tests();
+    register_linear_tests();
+    register_freelist_tests();
 
     // run
     test_manager_run();
@@ -40,8 +45,8 @@ int main() {
     // destroy
     test_manager_destroy();
 
-    // log mem state
-    memory_state_log();
-
     logger_shutdown();
+
+    zmemory_log();
+    zmemory_destroy();
 }

@@ -1,5 +1,5 @@
-#ifndef MAP_H
-#define MAP_H
+#ifndef MAP__H
+#define MAP__H
 
 #include "defines.h"
 
@@ -26,7 +26,7 @@ void map_insert(map* mp, const void* key, const void* data);
 
 void map_remove(map* mp, const void* key);
 
-u64 map_size(map* mp);
+u64 map_length(map* mp);
 
 void* map_data(map* mp, const void* key);
 

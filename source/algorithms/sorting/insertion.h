@@ -1,8 +1,8 @@
-#ifndef INSERTION_H
-#define INSERTION_H
+#ifndef INSERTION__H
+#define INSERTION__H
 
 #include "defines.h"
 
-void insertion_run(const u32 buffer_size);
+void insertion_run();
 
 #endif

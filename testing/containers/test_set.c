@@ -2,7 +2,8 @@
 #include "expect.h"
 #include "test_manager.h"
 #include "set.h"
-#include "common.h"
+#include "zmemory.h"
+#include "utils.h"
 
 typedef struct {
     i32 id;
@@ -43,11 +44,11 @@ u32 test_set_int_basic_operations() {
         set_insert(int_set, &values[i]);
     }
 
-    expect_should_be(5, set_size(int_set));
+    expect_should_be(5, set_length(int_set));
 
     // Test duplicate insertion
-    set_insert(int_set, &values[0]);        // Try inserting 5 again
-    expect_should_be(5, set_size(int_set)); // Size should not change
+    set_insert(int_set, &values[0]);          // Try inserting 5 again
+    expect_should_be(5, set_length(int_set)); // Size should not change
 
     // Test contains
     expect_should_be(true, set_contains(int_set, &values[0]));
@@ -66,7 +67,7 @@ u32 test_set_int_basic_operations() {
 
     // Test removal
     set_remove(int_set, &values[2]); // Remove 7
-    expect_should_be(4, set_size(int_set));
+    expect_should_be(4, set_length(int_set));
     expect_should_be(false, set_contains(int_set, &values[2]));
 
     set_destroy(int_set);
@@ -84,13 +85,13 @@ u32 test_set_float_basic_operations() {
     }
 
     // Should only have 3 unique values
-    expect_should_be(3, set_size(float_set));
+    expect_should_be(3, set_length(float_set));
 
     // Test iteration (should be ordered)
     set_node* node = set_begin(float_set);
     f32 expected_order[] = {1.5f, 2.5f, 3.5f};
     for (i32 i = 0; i < 3; i++) {
-        expect_float_should_be(expected_order[i], *(f32*)node->data);
+        expect_float_should_be(expected_order[i], *(f32*)node->data, EPSILON);
         if (i < 2) {
             node = set_next(float_set, node);
         }
@@ -114,13 +115,13 @@ u32 test_set_struct_basic_operations() {
     set_insert(struct_set, &s2);
     set_insert(struct_set, &s3); // Should update s1's values
 
-    expect_should_be(2, set_size(struct_set)); // Should only have 2 unique elements
+    expect_should_be(2, set_length(struct_set)); // Should only have 2 unique elements
 
     // Verify the updated values
     set_node* node = set_begin(struct_set);
     TestStruct* retrieved = (TestStruct*)node->data;
     expect_should_be(1, retrieved->id);
-    expect_float_should_be(10.5f, retrieved->value); // Should have s3's value
+    expect_float_should_be(10.5f, retrieved->value, EPSILON); // Should have s3's value
 
     set_destroy(struct_set);
     return true;
@@ -131,22 +132,22 @@ u32 test_set_edge_cases() {
     set* int_set = set_create(i32, set_int_compare);
 
     // Test empty set operations
-    expect_should_be(0, set_size(int_set));
+    expect_should_be(0, set_length(int_set));
     expect_should_be(false, set_contains(int_set, &(i32){1}));
 
     // Test single element
     i32 value = 42;
     set_insert(int_set, &value);
-    expect_should_be(1, set_size(int_set));
+    expect_should_be(1, set_length(int_set));
 
     // Test removal of non-existent element
     i32 non_existent = 100;
     set_remove(int_set, &non_existent);
-    expect_should_be(1, set_size(int_set)); // Size shouldn't change
+    expect_should_be(1, set_length(int_set)); // Size shouldn't change
 
     // Test removal of the only element
     set_remove(int_set, &value);
-    expect_should_be(0, set_size(int_set));
+    expect_should_be(0, set_length(int_set));
 
     set_destroy(int_set);
     return true;
@@ -161,7 +162,7 @@ u32 test_set_large_operations() {
         set_insert(int_set, &i);
     }
 
-    expect_should_be(1000, set_size(int_set));
+    expect_should_be(1000, set_length(int_set));
 
     // Verify ordering
     set_node* node = set_begin(int_set);
@@ -177,7 +178,7 @@ u32 test_set_large_operations() {
         set_remove(int_set, &i);
     }
 
-    expect_should_be(500, set_size(int_set));
+    expect_should_be(500, set_length(int_set));
 
     set_destroy(int_set);
     return true;

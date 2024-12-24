@@ -1,6 +1,19 @@
 #include "list.h"
-#include "common.h"
+#include "zmemory.h"
 #include "logger.h"
+
+//////////////////////////////////
+//  __  __              __      //
+// /  |/  |            /  |     //
+// $$ |$$/   _______  _$$ |_    //
+// $$ |/  | /       |/ $$   |   //
+// $$ |$$ |/$$$$$$$/ $$$$$$/    //
+// $$ |$$ |$$      \   $$ | __  //
+// $$ |$$ | $$$$$$  |  $$ |/  | //
+// $$ |$$ |/     $$/   $$  $$/  //
+// $$/ $$/ $$$$$$$/     $$$$/   //
+//                              //
+//////////////////////////////////
 
 // using singly linked list
 typedef struct list_node {
@@ -8,11 +21,11 @@ typedef struct list_node {
     struct list_node* next;
 } list_node;
 
-struct list {
+typedef struct list {
     list_node* node;
     u64 size;
     u64 stride;
-};
+} list;
 
 list_node* create_list_node(const void* data, u64 stride);
 void destroy_list_node(list_node* node, u64 stride);
@@ -20,7 +33,7 @@ list_node* reverse_list_nodes(list_node* node);
 list_node* sort_list_nodes(list_node* head, PFN_list_cmp cmp_func);
 
 list* _list_create(u64 stride) {
-    list* temp = (list*)memory_allocate(sizeof(list), MEMORY_TAG_LIST);
+    list* temp = (list*)zmemory_allocate(sizeof(list), MEMORY_TAG_LIST);
     temp->size = 0;
     temp->node = 0;
     temp->stride = stride;
@@ -33,7 +46,7 @@ void list_destroy(list* lst) {
     if (lst->node)
         destroy_list_node(lst->node, lst->stride);
 
-    memory_free(lst, sizeof(list), MEMORY_TAG_LIST);
+    zmemory_free(lst, sizeof(list), MEMORY_TAG_LIST);
 }
 
 void list_push_back(list* lst, const void* data) {
@@ -178,7 +191,7 @@ void list_clear(list* lst) {
     }
 }
 
-u64 list_size(list* lst) {
+u64 list_length(list* lst) {
     return lst->size;
 }
 
@@ -286,12 +299,26 @@ void list_unique(list* sorted_lst, PFN_list_cmp cmp_func) {
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+//  __                  __                                          //
+// /  |                /  |                                         //
+// $$ |____    ______  $$ |  ______    ______    ______    _______  //
+// $$      \  /      \ $$ | /      \  /      \  /      \  /       | //
+// $$$$$$$  |/$$$$$$  |$$ |/$$$$$$  |/$$$$$$  |/$$$$$$  |/$$$$$$$/  //
+// $$ |  $$ |$$    $$ |$$ |$$ |  $$ |$$    $$ |$$ |  $$/ $$      \  //
+// $$ |  $$ |$$$$$$$$/ $$ |$$ |__$$ |$$$$$$$$/ $$ |       $$$$$$  | //
+// $$ |  $$ |$$       |$$ |$$    $$/ $$       |$$ |      /     $$/  //
+// $$/   $$/  $$$$$$$/ $$/ $$$$$$$/   $$$$$$$/ $$/       $$$$$$$/   //
+//                         $$ |                                     //
+//                         $$ |                                     //
+//                         $$/                                      //
+//                                                                  //
+//////////////////////////////////////////////////////////////////////
 
 list_node* create_list_node(const void* data, u64 stride) {
-    list_node* temp = (list_node*)memory_allocate(sizeof(list_node), MEMORY_TAG_LIST);
-    temp->data = memory_allocate(stride, MEMORY_TAG_LIST);
-    memory_copy(temp->data, data, stride);
+    list_node* temp = (list_node*)zmemory_allocate(sizeof(list_node), MEMORY_TAG_LIST);
+    temp->data = zmemory_allocate(stride, MEMORY_TAG_LIST);
+    zmemory_copy(temp->data, data, stride);
     temp->next = 0;
 
     return temp;
@@ -305,8 +332,8 @@ void destroy_list_node(list_node* node, u64 stride) {
 
     destroy_list_node(node->next, stride);
 
-    memory_free(node->data, stride, MEMORY_TAG_LIST);
-    memory_free(node, sizeof(list_node), MEMORY_TAG_LIST);
+    zmemory_free(node->data, stride, MEMORY_TAG_LIST);
+    zmemory_free(node, sizeof(list_node), MEMORY_TAG_LIST);
     return;
 }
 

@@ -1,5 +1,5 @@
-#ifndef UNORDERED_MAP_H
-#define UNORDERED_MAP_H
+#ifndef UNORDERED_MAP__H
+#define UNORDERED_MAP__H
 
 #include "defines.h"
 
@@ -29,7 +29,7 @@ void unordered_map_remove(unordered_map* un_map, const void* key);
 
 unordered_map* unordered_map_resize(unordered_map* un_map);
 
-u64 unordered_map_size(unordered_map* un_map);
+u64 unordered_map_length(unordered_map* un_map);
 
 u64 unordered_map_capacity(unordered_map* un_map);
 

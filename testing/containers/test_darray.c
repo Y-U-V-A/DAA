@@ -15,7 +15,7 @@ u32 test_darray_init() {
 
     expect_should_be(DARRAY_DEFAULT_LENGTH, darray_capacity(array));
     expect_should_be(sizeof(i32), darray_stride(array));
-    expect_should_be(0, darray_size(array));
+    expect_should_be(0, darray_length(array));
 
     darray_destroy(array);
     return true;
@@ -27,7 +27,7 @@ u32 test_darray_push_back_integers() {
     // Test pushing elements
     i32 test_value = 42;
     darray_push_back(array, test_value);
-    expect_should_be(1, darray_size(array));
+    expect_should_be(1, darray_length(array));
     expect_should_be(test_value, array[0]);
 
     // Test array resizing
@@ -35,7 +35,7 @@ u32 test_darray_push_back_integers() {
         darray_push_back(array, i);
     }
 
-    expect_should_be(6, darray_size(array));
+    expect_should_be(6, darray_length(array));
     expect_should_be(8, darray_capacity(array)); // Should have resized to 8 (2 * DARRAY_DEFAULT_LENGTH * DARRAY_RESIZE_FACTOR)
 
     darray_destroy(array);
@@ -50,11 +50,11 @@ u32 test_darray_pop_back_integers() {
         darray_push_back(array, i);
     }
 
-    expect_should_be(3, darray_size(array));
+    expect_should_be(3, darray_length(array));
 
     // Test popping
     darray_pop_back(array);
-    expect_should_be(2, darray_size(array));
+    expect_should_be(2, darray_length(array));
     expect_should_be(1, array[1]);
 
     darray_destroy(array);
@@ -73,7 +73,7 @@ u32 test_darray_insert_integers() {
     i32 insert_value = 42;
     darray_insert(array, 1, insert_value);
 
-    expect_should_be(4, darray_size(array));
+    expect_should_be(4, darray_length(array));
     expect_should_be(insert_value, array[1]);
     expect_should_be(1, array[2]); // Original value should have been shifted
 
@@ -92,7 +92,7 @@ u32 test_darray_remove_integers() {
     // Test removal
     darray_remove(array, 1);
 
-    expect_should_be(3, darray_size(array));
+    expect_should_be(3, darray_length(array));
     expect_should_be(2, array[1]); // Element at index 2 should have shifted down
 
     darray_destroy(array);
@@ -111,9 +111,9 @@ u32 test_darray_struct_operations() {
 
     darray_push_back(array, test_item);
 
-    expect_should_be(1, darray_size(array));
+    expect_should_be(1, darray_length(array));
     expect_should_be(test_item.x, array[0].x);
-    expect_float_should_be(test_item.y, array[0].y);
+    expect_float_should_be(test_item.y, array[0].y, EPSILON);
 
     // Test inserting structs
     TestStruct insert_item = {
@@ -124,7 +124,7 @@ u32 test_darray_struct_operations() {
 
     darray_insert(array, 0, insert_item);
 
-    expect_should_be(2, darray_size(array));
+    expect_should_be(2, darray_length(array));
     expect_should_be(insert_item.x, array[0].x);
     expect_should_be(test_item.x, array[1].x);
 

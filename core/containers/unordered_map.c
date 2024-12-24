@@ -1,6 +1,22 @@
 #include "unordered_map.h"
-#include "common.h"
+#include "zmemory.h"
 #include "logger.h"
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                __                                      __                                           //
+//                                               /  |                                    /  |                                          //
+//  __    __  _______    ______    ______    ____$$ |  ______    ______    ______    ____$$ |        _____  ____    ______    ______   //
+// /  |  /  |/       \  /      \  /      \  /    $$ | /      \  /      \  /      \  /    $$ |       /     \/    \  /      \  /      \  //
+// $$ |  $$ |$$$$$$$  |/$$$$$$  |/$$$$$$  |/$$$$$$$ |/$$$$$$  |/$$$$$$  |/$$$$$$  |/$$$$$$$ |       $$$$$$ $$$$  | $$$$$$  |/$$$$$$  | //
+// $$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$/ $$ |  $$ |$$    $$ |$$ |  $$/ $$    $$ |$$ |  $$ |       $$ | $$ | $$ | /    $$ |$$ |  $$ | //
+// $$ \__$$ |$$ |  $$ |$$ \__$$ |$$ |      $$ \__$$ |$$$$$$$$/ $$ |      $$$$$$$$/ $$ \__$$ |       $$ | $$ | $$ |/$$$$$$$ |$$ |__$$ | //
+// $$    $$/ $$ |  $$ |$$    $$/ $$ |      $$    $$ |$$       |$$ |      $$       |$$    $$ |______ $$ | $$ | $$ |$$    $$ |$$    $$/  //
+//  $$$$$$/  $$/   $$/  $$$$$$/  $$/        $$$$$$$/  $$$$$$$/ $$/        $$$$$$$/  $$$$$$$//      |$$/  $$/  $$/  $$$$$$$/ $$$$$$$/   //
+//                                                                                          $$$$$$/                         $$ |       //
+//                                                                                                                          $$ |       //
+//                                                                                                                          $$/        //
+//                                                                                                                                     //
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 typedef struct unmap_node {
     void* key;
@@ -29,9 +45,9 @@ unordered_map* _unordered_map_create(u64 size, u64 key_stride, u64 data_stride, 
         hash_func = default_unordered_map_hash;
     }
 
-    unordered_map* temp = (unordered_map*)memory_allocate(sizeof(unordered_map), MEMORY_TAG_UNORDERED_MAP);
+    unordered_map* temp = (unordered_map*)zmemory_allocate(sizeof(unordered_map), MEMORY_TAG_UNORDERED_MAP);
     // sizeof(ptr)*UNORDERED_MAP_DEFAULT_SIZE;
-    temp->array = (unmap_node**)memory_allocate(sizeof(unmap_node*) * size, MEMORY_TAG_UNORDERED_MAP);
+    temp->array = (unmap_node**)zmemory_allocate(sizeof(unmap_node*) * size, MEMORY_TAG_UNORDERED_MAP);
     temp->size = 0;
     temp->cap = size;
     temp->key_stride = key_stride;
@@ -48,8 +64,8 @@ void unordered_map_destroy(unordered_map* un_map) {
             un_map->array[i] = 0;
         }
     }
-    memory_free(un_map->array, sizeof(unmap_node*) * un_map->cap, MEMORY_TAG_UNORDERED_MAP);
-    memory_free(un_map, sizeof(unordered_map), MEMORY_TAG_UNORDERED_MAP);
+    zmemory_free(un_map->array, sizeof(unmap_node*) * un_map->cap, MEMORY_TAG_UNORDERED_MAP);
+    zmemory_free(un_map, sizeof(unordered_map), MEMORY_TAG_UNORDERED_MAP);
 }
 
 unordered_map* _unordered_map_insert(unordered_map* un_map, const void* key, const void* data) {
@@ -67,8 +83,8 @@ unordered_map* _unordered_map_insert(unordered_map* un_map, const void* key, con
         unmap_node* curr = un_map->array[hash];
         unmap_node* prev = 0;
         while (curr) {
-            if (memory_compare(curr->key, key, un_map->key_stride) == 0) {
-                memory_copy(curr->data, data, un_map->data_stride);
+            if (zmemory_compare(curr->key, key, un_map->key_stride) == 0) {
+                zmemory_copy(curr->data, data, un_map->data_stride);
                 return un_map;
             }
             prev = curr;
@@ -90,7 +106,7 @@ void* unordered_map_data(unordered_map* un_map, const void* key) {
     unmap_node* node = un_map->array[hash];
 
     while (node) {
-        if (memory_compare(node->key, key, un_map->key_stride) == 0) {
+        if (zmemory_compare(node->key, key, un_map->key_stride) == 0) {
             return node->data;
         }
         node = node->next;
@@ -107,7 +123,7 @@ void unordered_map_remove(unordered_map* un_map, const void* key) {
 
     unmap_node* node = un_map->array[hash];
 
-    if (memory_compare(node->key, key, un_map->key_stride) == 0) {
+    if (zmemory_compare(node->key, key, un_map->key_stride) == 0) {
         un_map->array[hash] = node->next;
         node->next = 0;
         destroy_unmap_node(node, un_map->key_stride, un_map->data_stride);
@@ -117,7 +133,7 @@ void unordered_map_remove(unordered_map* un_map, const void* key) {
 
     unmap_node* prev = 0;
     while (node) {
-        if (memory_compare(node->key, key, un_map->key_stride) == 0) {
+        if (zmemory_compare(node->key, key, un_map->key_stride) == 0) {
             prev->next = node->next;
             node->next = 0;
             destroy_unmap_node(node, un_map->key_stride, un_map->data_stride);
@@ -151,7 +167,7 @@ unordered_map* unordered_map_resize(unordered_map* un_map) {
     return temp;
 }
 
-u64 unordered_map_size(unordered_map* un_map) {
+u64 unordered_map_length(unordered_map* un_map) {
     return un_map->size;
 }
 
@@ -165,7 +181,7 @@ bool unordered_map_contains(unordered_map* un_map, const void* key) {
     unmap_node* node = un_map->array[hash];
 
     while (node) {
-        if (memory_compare(node->key, key, un_map->key_stride) == 0) {
+        if (zmemory_compare(node->key, key, un_map->key_stride) == 0) {
 
             return true;
         }
@@ -174,16 +190,30 @@ bool unordered_map_contains(unordered_map* un_map, const void* key) {
     return false;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+//  __                  __                                          //
+// /  |                /  |                                         //
+// $$ |____    ______  $$ |  ______    ______    ______    _______  //
+// $$      \  /      \ $$ | /      \  /      \  /      \  /       | //
+// $$$$$$$  |/$$$$$$  |$$ |/$$$$$$  |/$$$$$$  |/$$$$$$  |/$$$$$$$/  //
+// $$ |  $$ |$$    $$ |$$ |$$ |  $$ |$$    $$ |$$ |  $$/ $$      \  //
+// $$ |  $$ |$$$$$$$$/ $$ |$$ |__$$ |$$$$$$$$/ $$ |       $$$$$$  | //
+// $$ |  $$ |$$       |$$ |$$    $$/ $$       |$$ |      /     $$/  //
+// $$/   $$/  $$$$$$$/ $$/ $$$$$$$/   $$$$$$$/ $$/       $$$$$$$/   //
+//                         $$ |                                     //
+//                         $$ |                                     //
+//                         $$/                                      //
+//                                                                  //
+//////////////////////////////////////////////////////////////////////
 
 unmap_node* create_unmap_node(const void* key, const void* data, u64 key_stride, u64 data_stride) {
-    unmap_node* temp = (unmap_node*)memory_allocate(sizeof(unmap_node), MEMORY_TAG_UNORDERED_MAP);
+    unmap_node* temp = (unmap_node*)zmemory_allocate(sizeof(unmap_node), MEMORY_TAG_UNORDERED_MAP);
 
-    temp->key = memory_allocate(key_stride, MEMORY_TAG_UNORDERED_MAP);
-    memory_copy(temp->key, key, key_stride);
+    temp->key = zmemory_allocate(key_stride, MEMORY_TAG_UNORDERED_MAP);
+    zmemory_copy(temp->key, key, key_stride);
 
-    temp->data = memory_allocate(data_stride, MEMORY_TAG_UNORDERED_MAP);
-    memory_copy(temp->data, data, data_stride);
+    temp->data = zmemory_allocate(data_stride, MEMORY_TAG_UNORDERED_MAP);
+    zmemory_copy(temp->data, data, data_stride);
 
     temp->next = 0;
 
@@ -198,9 +228,9 @@ void destroy_unmap_node(unmap_node* node, u64 key_stride, u64 data_stride) {
 
     destroy_unmap_node(node->next, key_stride, data_stride);
 
-    memory_free(node->key, key_stride, MEMORY_TAG_UNORDERED_MAP);
-    memory_free(node->data, data_stride, MEMORY_TAG_UNORDERED_MAP);
-    memory_free(node, sizeof(unmap_node), MEMORY_TAG_UNORDERED_MAP);
+    zmemory_free(node->key, key_stride, MEMORY_TAG_UNORDERED_MAP);
+    zmemory_free(node->data, data_stride, MEMORY_TAG_UNORDERED_MAP);
+    zmemory_free(node, sizeof(unmap_node), MEMORY_TAG_UNORDERED_MAP);
     return;
 }
 

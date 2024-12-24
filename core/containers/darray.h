@@ -1,5 +1,5 @@
-#ifndef DARRAY_H
-#define DARRAY_H
+#ifndef DARRAY__H
+#define DARRAY__H
 
 #include "defines.h"
 
@@ -18,7 +18,7 @@ typedef enum darray_field {
 #define darray_create(type) (type*)_darray_create(DARRAY_DEFAULT_LENGTH, sizeof(type))
 #define darray_reserve(length, type) (type*)_darray_create(length, sizeof(type))
 
-#define darray_size(darray) _darray_get_field(darray, DARRAY_FIELD_LENGTH)
+#define darray_length(darray) _darray_get_field(darray, DARRAY_FIELD_LENGTH)
 #define darray_capacity(darray) _darray_get_field(darray, DARRAY_FIELD_CAPACITY)
 #define darray_stride(darray) _darray_get_field(darray, DARRAY_FIELD_STRIDE)
 

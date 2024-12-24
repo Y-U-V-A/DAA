@@ -1,5 +1,5 @@
-#ifndef UNORDERED_TEST_SET_H
-#define UNORDERED_TEST_SET_H
+#ifndef UNORDERED_TEST_SET__H
+#define UNORDERED_TEST_SET__H
 
 void register_unordered_set_tests();
 

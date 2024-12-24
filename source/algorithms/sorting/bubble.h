@@ -1,8 +1,8 @@
-#ifndef BUBBLE_H
-#define BUBBLE_H
+#ifndef BUBBLE__H
+#define BUBBLE__H
 
 #include "defines.h"
 
-void bubble_run(const u32 buffer_size);
+void bubble_run();
 
 #endif

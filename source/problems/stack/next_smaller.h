@@ -1,5 +1,5 @@
-#ifndef NEXT_SMALLER_H
-#define NEXT_SMALLER_H
+#ifndef NEXT_SMALLER__H
+#define NEXT_SMALLER__H
 
 void next_smaller_run();
 

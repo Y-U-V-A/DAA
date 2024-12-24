@@ -1,5 +1,5 @@
-#ifndef EXPECT_H
-#define EXPECT_H
+#ifndef EXPECT__H
+#define EXPECT__H
 
 #include "logger.h"
 
@@ -15,8 +15,8 @@
         return false;                                                                         \
     }
 
-#define expect_float_should_be(expected, actual)                                       \
-    if (ABS(expected - actual) > EPSILON) {                                            \
+#define expect_float_should_be(expected, actual, tolerance)                            \
+    if (ABS(expected - actual) > tolerance) {                                          \
         LOGE("expected %lf but got %lf, %s:%d", expected, actual, __FILE__, __LINE__); \
         return false;                                                                  \
     }

@@ -1,6 +1,19 @@
 #include "set.h"
-#include "common.h"
+#include "zmemory.h"
 #include "logger.h"
+
+////////////////////////////////////
+//                        __      //
+//                       /  |     //
+//   _______   ______   _$$ |_    //
+//  /       | /      \ / $$   |   //
+// /$$$$$$$/ /$$$$$$  |$$$$$$/    //
+// $$      \ $$    $$ |  $$ | __  //
+//  $$$$$$  |$$$$$$$$/   $$ |/  | //
+// /     $$/ $$       |  $$  $$/  //
+// $$$$$$$/   $$$$$$$/    $$$$/   //
+//                                //
+////////////////////////////////////
 
 set_node* create_set_node(const void* data, u64 data_stride);
 void destroy_set_node(set_node* node, u64 data_stride);
@@ -14,16 +27,16 @@ void insert_fix_up_set_node(set* st, set_node* node);
 
 void remove_fix_up_set_node(set* st, set_node* node);
 
-struct set {
+typedef struct set {
     set_node* root;
     u64 size;
     u64 data_stride;
     PFN_set_cmp cmp_func;
-};
+} set;
 
 set* _set_create(u64 data_stride, PFN_set_cmp cmp_func) {
 
-    set* temp = memory_allocate(sizeof(set), MEMORY_TAG_SET);
+    set* temp = zmemory_allocate(sizeof(set), MEMORY_TAG_SET);
     temp->root = 0;
     temp->size = 0;
     temp->data_stride = data_stride;
@@ -36,7 +49,7 @@ void set_destroy(set* st) {
     if (st->root) {
         destroy_set_node(st->root, st->data_stride);
     }
-    memory_free(st, sizeof(set), MEMORY_TAG_SET);
+    zmemory_free(st, sizeof(set), MEMORY_TAG_SET);
 }
 
 void set_insert(set* st, const void* data) {
@@ -50,8 +63,8 @@ void set_insert(set* st, const void* data) {
 
         while (temp) {
 
-            if (memory_compare(temp->data, data, st->data_stride) == 0) {
-                memory_copy(temp->data, data, st->data_stride);
+            if (zmemory_compare(temp->data, data, st->data_stride) == 0) {
+                zmemory_copy(temp->data, data, st->data_stride);
                 destroy_set_node(node, st->data_stride);
                 return;
             }
@@ -86,12 +99,12 @@ void set_remove(set* st, const void* data) {
 
     set_node* node = st->root;
 
-    void* k = memory_allocate(st->data_stride, MEMORY_TAG_SET);
-    memory_copy(k, data, st->data_stride);
+    void* k = zmemory_allocate(st->data_stride, MEMORY_TAG_SET);
+    zmemory_copy(k, data, st->data_stride);
 
     while (node) {
 
-        if (memory_compare(node->data, k, st->data_stride) == 0) {
+        if (zmemory_compare(node->data, k, st->data_stride) == 0) {
 
             if (node->left == 0 && node->right == 0) {
 
@@ -114,7 +127,7 @@ void set_remove(set* st, const void* data) {
 
                 st->size -= 1;
 
-                memory_free(k, st->data_stride, MEMORY_TAG_SET);
+                zmemory_free(k, st->data_stride, MEMORY_TAG_SET);
 
                 return;
 
@@ -125,9 +138,9 @@ void set_remove(set* st, const void* data) {
                     prev = prev->right;
                 }
 
-                memory_copy(node->data, prev->data, st->data_stride);
+                zmemory_copy(node->data, prev->data, st->data_stride);
 
-                memory_copy(k, prev->data, st->data_stride);
+                zmemory_copy(k, prev->data, st->data_stride);
 
                 node = node->left;
 
@@ -138,9 +151,9 @@ void set_remove(set* st, const void* data) {
                     next = next->left;
                 }
 
-                memory_copy(node->data, next->data, st->data_stride);
+                zmemory_copy(node->data, next->data, st->data_stride);
 
-                memory_copy(k, next->data, st->data_stride);
+                zmemory_copy(k, next->data, st->data_stride);
 
                 node = node->right;
             }
@@ -157,12 +170,12 @@ void set_remove(set* st, const void* data) {
 
     LOGW("set_remove : invalid key");
 
-    memory_free(k, st->data_stride, MEMORY_TAG_SET);
+    zmemory_free(k, st->data_stride, MEMORY_TAG_SET);
 
     return;
 }
 
-u64 set_size(set* st) {
+u64 set_length(set* st) {
     return st->size;
 }
 
@@ -188,7 +201,7 @@ set_node* set_next(set* st, set_node* node) {
 
     while (temp) {
 
-        if (memory_compare(temp->data, node->data, st->data_stride) == 0) {
+        if (zmemory_compare(temp->data, node->data, st->data_stride) == 0) {
             break;
         }
 
@@ -215,7 +228,7 @@ bool set_contains(set* st, const void* data) {
     set_node* temp = st->root;
     while (temp) {
 
-        if (memory_compare(temp->data, data, st->data_stride) == 0) {
+        if (zmemory_compare(temp->data, data, st->data_stride) == 0) {
             return true;
         }
 
@@ -229,13 +242,28 @@ bool set_contains(set* st, const void* data) {
     }
     return false;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////
+//  __                  __                                          //
+// /  |                /  |                                         //
+// $$ |____    ______  $$ |  ______    ______    ______    _______  //
+// $$      \  /      \ $$ | /      \  /      \  /      \  /       | //
+// $$$$$$$  |/$$$$$$  |$$ |/$$$$$$  |/$$$$$$  |/$$$$$$  |/$$$$$$$/  //
+// $$ |  $$ |$$    $$ |$$ |$$ |  $$ |$$    $$ |$$ |  $$/ $$      \  //
+// $$ |  $$ |$$$$$$$$/ $$ |$$ |__$$ |$$$$$$$$/ $$ |       $$$$$$  | //
+// $$ |  $$ |$$       |$$ |$$    $$/ $$       |$$ |      /     $$/  //
+// $$/   $$/  $$$$$$$/ $$/ $$$$$$$/   $$$$$$$/ $$/       $$$$$$$/   //
+//                         $$ |                                     //
+//                         $$ |                                     //
+//                         $$/                                      //
+//                                                                  //
+//////////////////////////////////////////////////////////////////////
 
 set_node* create_set_node(const void* data, u64 data_stride) {
-    set_node* temp = memory_allocate(sizeof(set_node), MEMORY_TAG_SET);
+    set_node* temp = zmemory_allocate(sizeof(set_node), MEMORY_TAG_SET);
 
-    temp->data = memory_allocate(data_stride, MEMORY_TAG_SET);
-    memory_copy(temp->data, data, data_stride);
+    temp->data = zmemory_allocate(data_stride, MEMORY_TAG_SET);
+    zmemory_copy(temp->data, data, data_stride);
 
     temp->left = 0;
     temp->right = 0;
@@ -253,8 +281,8 @@ void destroy_set_node(set_node* node, u64 data_stride) {
     destroy_set_node(node->left, data_stride);
     destroy_set_node(node->right, data_stride);
 
-    memory_free(node->data, data_stride, MEMORY_TAG_SET);
-    memory_free(node, sizeof(set_node), MEMORY_TAG_SET);
+    zmemory_free(node->data, data_stride, MEMORY_TAG_SET);
+    zmemory_free(node, sizeof(set_node), MEMORY_TAG_SET);
 }
 
 // node will become left child of node's right child ,

@@ -2,7 +2,8 @@
 #include "expect.h"
 #include "test_manager.h"
 #include "map.h"
-#include "common.h"
+#include "zmemory.h"
+#include "utils.h"
 
 typedef struct {
     i32 id;
@@ -47,7 +48,7 @@ u32 test_map_int_basic_operations() {
     map_insert(int_map, &key2, &value2);
     map_insert(int_map, &key3, &value3);
 
-    expect_should_be(3, map_size(int_map));
+    expect_should_be(3, map_length(int_map));
 
     // Test retrieval
     i32* retrieved = (i32*)map_data(int_map, &key2);
@@ -59,7 +60,7 @@ u32 test_map_int_basic_operations() {
 
     // Test removal
     map_remove(int_map, &key2);
-    expect_should_be(2, map_size(int_map));
+    expect_should_be(2, map_length(int_map));
     expect_should_be(false, map_contains(int_map, &key2));
 
     map_destroy(int_map);
@@ -79,17 +80,17 @@ u32 test_map_float_basic_operations() {
     map_insert(float_map, &key2, &value2);
     map_insert(float_map, &key3, &value3);
 
-    expect_should_be(3, map_size(float_map));
+    expect_should_be(3, map_length(float_map));
 
     // Test retrieval
     f32* retrieved = (f32*)map_data(float_map, &key2);
-    expect_float_should_be(20.5f, *retrieved);
+    expect_float_should_be(20.5f, *retrieved, EPSILON);
 
     // Test update
     f32 new_value = 25.5f;
     map_insert(float_map, &key2, &new_value);
     retrieved = (f32*)map_data(float_map, &key2);
-    expect_float_should_be(25.5f, *retrieved);
+    expect_float_should_be(25.5f, *retrieved, EPSILON);
 
     map_destroy(float_map);
     return true;
@@ -109,12 +110,12 @@ u32 test_map_struct_basic_operations() {
     map_insert(struct_map, &s2, &s2);
     map_insert(struct_map, &s3, &s3);
 
-    expect_should_be(3, map_size(struct_map));
+    expect_should_be(3, map_length(struct_map));
 
     // Test retrieval
     TestStruct* retrieved = (TestStruct*)map_data(struct_map, &s2);
     expect_should_be(2, retrieved->id);
-    expect_float_should_be(20.5f, retrieved->value);
+    expect_float_should_be(20.5f, retrieved->value, EPSILON);
 
     // Test iteration
     map_node* node = map_begin(struct_map);
@@ -135,7 +136,7 @@ u32 test_map_edge_cases() {
     map* int_map = map_create(i32, i32, map_int_compare);
 
     // Test empty map operations
-    expect_should_be(0, map_size(int_map));
+    expect_should_be(0, map_length(int_map));
     expect_should_be(false, map_contains(int_map, &(i32){1}));
     expect_should_be(0, map_data(int_map, &(i32){1}));
 
@@ -143,12 +144,12 @@ u32 test_map_edge_cases() {
     i32 key = 1, value1 = 100, value2 = 200;
     map_insert(int_map, &key, &value1);
     map_insert(int_map, &key, &value2);
-    expect_should_be(1, map_size(int_map));
+    expect_should_be(1, map_length(int_map));
     expect_should_be(200, *(i32*)map_data(int_map, &key));
 
     // Test removal of non-existent key
     map_remove(int_map, &(i32){999});
-    expect_should_be(1, map_size(int_map));
+    expect_should_be(1, map_length(int_map));
 
     map_destroy(int_map);
     return true;

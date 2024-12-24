@@ -1,8 +1,8 @@
-#ifndef BFS_H
-#define BFS_H
+#ifndef BFS__H
+#define BFS__H
 
 #include "defines.h"
 
-void bfs_run(const u32 buffer_size);
+void bfs_run();
 
 #endif

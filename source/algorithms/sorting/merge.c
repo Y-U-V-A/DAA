@@ -2,7 +2,8 @@
 #include "clock.h"
 #include "darray.h"
 #include "logger.h"
-#include "common.h"
+#include "zmemory.h"
+#include "utils.h"
 
 void merge_sort(i32* arr, i32 s, i32 e) {
 
@@ -46,56 +47,43 @@ void merge_sort(i32* arr, i32 s, i32 e) {
     darray_destroy(temp);
 }
 
-void merge_run(const u32 buffer_size) {
+void merge_run() {
 
-    LOGD("running merge sort... ");
+    random_seed();
 
-    i32 num;
-    LOGD("enter no of generate_random test cases to run");
+    LOGD("running merge sort ");
 
-    scan("%d", &num);
+    i32 testcases;
+    LOGD("enter no of random testcases to run ");
+    input("%d", &testcases);
+    i32 array_size;
+    LOGD("enter array size ");
+    input("%d", &array_size);
 
-    LOGD("n = %d", num);
+    i32* array = zmemory_allocate(array_size * sizeof(i32), MEMORY_TAG_ALGORITHM);
 
-    seed_random();
+    f64 time_taken = 0.0;
 
-    const i32 n = 30;
-    i32 array[n];
+    for (i32 i = 0; i < testcases; ++i) {
 
-    char* buffer = memory_allocate(buffer_size * sizeof(char), MEMORY_TAG_ALGORITHM);
-
-    clock clk;
-    clock_start(&clk);
-
-    for (i32 i = 0; i < num; ++i) {
-
-        for (i32 i = 0; i < n; ++i) {
-            array[i] = generate_random(200);
+        for (i32 i = 0; i < array_size; ++i) {
+            array[i] = random_int(0, 200);
         }
 
         clock clk;
-        clock_start(&clk);
-
-        merge_sort(array, 0, n - 1);
-
+        clock_set(&clk);
+        merge_sort(array, 0, array_size - 1);
         clock_update(&clk);
+        time_taken += clk.elapsed;
 
-        u32 offset = log_buffer(buffer, buffer_size, "time = %lfs , sorted array = ", clk.elapsed);
-
-        for (i32 i = 0; i < n; ++i) {
-
-            offset += log_buffer(buffer + offset, buffer_size - offset, "%d,", array[i]);
+        LOGZ("time = %lfs , sorted array = ", clk.elapsed);
+        for (i32 i = 0; i < array_size; ++i) {
+            LOGZ("%d,", array[i]);
         }
-
-        buffer[offset++] = '\n';
-        buffer[offset++] = '\0';
-
-        LOGD("%s", buffer);
+        LOGZ("\n");
     }
 
-    clock_update(&clk);
+    zmemory_free(array, array_size * sizeof(i32), MEMORY_TAG_ALGORITHM);
 
-    memory_free(buffer, buffer_size * sizeof(char), MEMORY_TAG_ALGORITHM);
-
-    LOGD("total time_s taken %lf\n", clk.elapsed);
+    LOGD("avarage time taken %lf\n", time_taken / testcases);
 }

@@ -1,19 +1,33 @@
 #include "unordered_set.h"
-#include "common.h"
+#include "zmemory.h"
 #include "logger.h"
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                __                                      __                               __      //
+//                                               /  |                                    /  |                             /  |     //
+//  __    __  _______    ______    ______    ____$$ |  ______    ______    ______    ____$$ |         _______   ______   _$$ |_    //
+// /  |  /  |/       \  /      \  /      \  /    $$ | /      \  /      \  /      \  /    $$ |        /       | /      \ / $$   |   //
+// $$ |  $$ |$$$$$$$  |/$$$$$$  |/$$$$$$  |/$$$$$$$ |/$$$$$$  |/$$$$$$  |/$$$$$$  |/$$$$$$$ |       /$$$$$$$/ /$$$$$$  |$$$$$$/    //
+// $$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$/ $$ |  $$ |$$    $$ |$$ |  $$/ $$    $$ |$$ |  $$ |       $$      \ $$    $$ |  $$ | __  //
+// $$ \__$$ |$$ |  $$ |$$ \__$$ |$$ |      $$ \__$$ |$$$$$$$$/ $$ |      $$$$$$$$/ $$ \__$$ |        $$$$$$  |$$$$$$$$/   $$ |/  | //
+// $$    $$/ $$ |  $$ |$$    $$/ $$ |      $$    $$ |$$       |$$ |      $$       |$$    $$ |______ /     $$/ $$       |  $$  $$/  //
+//  $$$$$$/  $$/   $$/  $$$$$$/  $$/        $$$$$$$/  $$$$$$$/ $$/        $$$$$$$/  $$$$$$$//      |$$$$$$$/   $$$$$$$/    $$$$/   //
+//                                                                                          $$$$$$/                                //
+//                                                                                                                                 //
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 typedef struct unset_node {
     void* data;
     struct unset_node* next;
 } unset_node;
 
-struct unordered_set {
+typedef struct unordered_set {
     unset_node** array; // not darray
     u64 size;
     u64 cap;
     u64 data_stride;
     PFN_unordered_set_hash hash_func;
-};
+} unordered_set;
 
 #define GENERATE_SET_HASH(un_set, data) un_set->hash_func(data, un_set->data_stride) % un_set->cap
 
@@ -27,9 +41,9 @@ unordered_set* _unordered_set_create(u64 size, u64 data_stride, PFN_unordered_se
         hash_func = default_unordered_set_hash;
     }
 
-    unordered_set* temp = (unordered_set*)memory_allocate(sizeof(unordered_set), MEMORY_TAG_UNORDERED_SET);
+    unordered_set* temp = (unordered_set*)zmemory_allocate(sizeof(unordered_set), MEMORY_TAG_UNORDERED_SET);
     // sizeof(ptr)*UNORDERED_MAP_DEFAULT_SIZE;
-    temp->array = (unset_node**)memory_allocate(sizeof(unset_node*) * size, MEMORY_TAG_UNORDERED_SET);
+    temp->array = (unset_node**)zmemory_allocate(sizeof(unset_node*) * size, MEMORY_TAG_UNORDERED_SET);
     temp->size = 0;
     temp->cap = size;
     temp->data_stride = data_stride;
@@ -45,8 +59,8 @@ void unordered_set_destroy(unordered_set* un_set) {
             un_set->array[i] = 0;
         }
     }
-    memory_free(un_set->array, sizeof(unset_node*) * un_set->cap, MEMORY_TAG_UNORDERED_SET);
-    memory_free(un_set, sizeof(unordered_set), MEMORY_TAG_UNORDERED_SET);
+    zmemory_free(un_set->array, sizeof(unset_node*) * un_set->cap, MEMORY_TAG_UNORDERED_SET);
+    zmemory_free(un_set, sizeof(unordered_set), MEMORY_TAG_UNORDERED_SET);
 }
 
 unordered_set* _unordered_set_insert(unordered_set* un_set, const void* data) {
@@ -64,7 +78,7 @@ unordered_set* _unordered_set_insert(unordered_set* un_set, const void* data) {
         unset_node* curr = un_set->array[hash];
         unset_node* prev = 0;
         while (curr) {
-            if (memory_compare(curr->data, data, un_set->data_stride) == 0) {
+            if (zmemory_compare(curr->data, data, un_set->data_stride) == 0) {
                 return un_set;
             }
             prev = curr;
@@ -86,7 +100,7 @@ void unordered_set_remove(unordered_set* un_set, const void* data) {
 
     unset_node* node = un_set->array[hash];
 
-    if (memory_compare(node->data, data, un_set->data_stride) == 0) {
+    if (zmemory_compare(node->data, data, un_set->data_stride) == 0) {
         un_set->array[hash] = node->next;
         node->next = 0;
         destroy_unset_node(node, un_set->data_stride);
@@ -96,7 +110,7 @@ void unordered_set_remove(unordered_set* un_set, const void* data) {
 
     unset_node* prev = 0;
     while (node) {
-        if (memory_compare(node->data, data, un_set->data_stride) == 0) {
+        if (zmemory_compare(node->data, data, un_set->data_stride) == 0) {
             prev->next = node->next;
             node->next = 0;
             destroy_unset_node(node, un_set->data_stride);
@@ -129,7 +143,7 @@ unordered_set* unordered_set_resize(unordered_set* un_set) {
     return temp;
 }
 
-u64 unordered_set_size(unordered_set* un_set) {
+u64 unordered_set_length(unordered_set* un_set) {
     return un_set->size;
 }
 
@@ -144,7 +158,7 @@ bool unordered_set_contains(unordered_set* un_set, const void* data) {
     unset_node* node = un_set->array[hash];
 
     while (node) {
-        if (memory_compare(node->data, data, un_set->data_stride) == 0) {
+        if (zmemory_compare(node->data, data, un_set->data_stride) == 0) {
             return true;
         }
         node = node->next;
@@ -152,13 +166,27 @@ bool unordered_set_contains(unordered_set* un_set, const void* data) {
     return false;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+//  __                  __                                          //
+// /  |                /  |                                         //
+// $$ |____    ______  $$ |  ______    ______    ______    _______  //
+// $$      \  /      \ $$ | /      \  /      \  /      \  /       | //
+// $$$$$$$  |/$$$$$$  |$$ |/$$$$$$  |/$$$$$$  |/$$$$$$  |/$$$$$$$/  //
+// $$ |  $$ |$$    $$ |$$ |$$ |  $$ |$$    $$ |$$ |  $$/ $$      \  //
+// $$ |  $$ |$$$$$$$$/ $$ |$$ |__$$ |$$$$$$$$/ $$ |       $$$$$$  | //
+// $$ |  $$ |$$       |$$ |$$    $$/ $$       |$$ |      /     $$/  //
+// $$/   $$/  $$$$$$$/ $$/ $$$$$$$/   $$$$$$$/ $$/       $$$$$$$/   //
+//                         $$ |                                     //
+//                         $$ |                                     //
+//                         $$/                                      //
+//                                                                  //
+//////////////////////////////////////////////////////////////////////
 
 unset_node* create_unset_node(const void* data, u64 data_stride) {
-    unset_node* temp = (unset_node*)memory_allocate(sizeof(unset_node), MEMORY_TAG_UNORDERED_SET);
+    unset_node* temp = (unset_node*)zmemory_allocate(sizeof(unset_node), MEMORY_TAG_UNORDERED_SET);
 
-    temp->data = memory_allocate(data_stride, MEMORY_TAG_UNORDERED_SET);
-    memory_copy(temp->data, data, data_stride);
+    temp->data = zmemory_allocate(data_stride, MEMORY_TAG_UNORDERED_SET);
+    zmemory_copy(temp->data, data, data_stride);
 
     temp->next = 0;
 
@@ -173,8 +201,8 @@ void destroy_unset_node(unset_node* node, u64 data_stride) {
 
     destroy_unset_node(node->next, data_stride);
 
-    memory_free(node->data, data_stride, MEMORY_TAG_UNORDERED_SET);
-    memory_free(node, sizeof(unset_node), MEMORY_TAG_UNORDERED_SET);
+    zmemory_free(node->data, data_stride, MEMORY_TAG_UNORDERED_SET);
+    zmemory_free(node, sizeof(unset_node), MEMORY_TAG_UNORDERED_SET);
     return;
 }
 

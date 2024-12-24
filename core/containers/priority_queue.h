@@ -1,5 +1,5 @@
-#ifndef PRIORITY_QUEUE_H
-#define PRIORITY_QUEUE_H
+#ifndef PRIORITY_QUEUE__H
+#define PRIORITY_QUEUE__H
 
 #include "defines.h"
 
@@ -19,6 +19,6 @@ void priority_queue_pop(priority_queue* prio_que);
 
 void* priority_queue_top(priority_queue* prio_que);
 
-u64 priority_queue_size(priority_queue* prio_que);
+u64 priority_queue_length(priority_queue* prio_que);
 
 #endif

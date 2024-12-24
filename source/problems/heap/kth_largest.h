@@ -1,8 +1,8 @@
-#ifndef KTH_LARGEST_H
-#define KTH_LARGEST_H
+#ifndef KTH_LARGEST__H
+#define KTH_LARGEST__H
 
 #include "defines.h"
 
-void kth_largest_run(const u32 buffer_size);
+void kth_largest_run();
 
 #endif

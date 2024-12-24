@@ -1,18 +1,26 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Debug (Windows)",
             "type": "lldb",
             "request": "launch",
-            "name": "Debug",
-            "program": "${workspaceFolder}/bin/DAA.exe",
+            "program": "${workspaceFolder}/bin/win32/EXE.exe",
             "args": [],
             "cwd": "${workspaceFolder}",
-            "console": "externalTerminal",
-            "terminal": "external",
+            "console": "integratedTerminal",
+            "terminal": "integrated",
+            "stopOnEntry": false,
+        },
+        {
+            "name": "Debug (Linux)",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/linux/EXE",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "terminal": "integrated",
             "stopOnEntry": false,
         }
     ]

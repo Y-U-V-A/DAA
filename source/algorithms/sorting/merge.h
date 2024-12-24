@@ -1,8 +1,8 @@
-#ifndef MERGE_H
-#define MERGE_H
+#ifndef MERGE__H
+#define MERGE__H
 
 #include "defines.h"
 
-void merge_run(const u32 buffer_size);
+void merge_run();
 
 #endif

@@ -21,7 +21,7 @@ typedef _Bool bool;
 
 #define EPSILON 1.19209290e-7F
 
-#define ABS(val) (val < 0 ? -val : val)
+#define ABS(val) ((val) < 0 ? -(val) : (val))
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 #    define ZWINDOWS

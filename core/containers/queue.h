@@ -1,5 +1,5 @@
-#ifndef QUEUE_H
-#define QUEUE_H
+#ifndef QUEUE__H
+#define QUEUE__H
 
 #include "defines.h"
 
@@ -19,6 +19,6 @@ void* queue_front(queue* que);
 
 void* queue_back(queue* que);
 
-u64 queue_size(queue* que);
+u64 queue_length(queue* que);
 
 #endif

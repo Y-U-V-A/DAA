@@ -1,5 +1,5 @@
-#ifndef TEST_MANAGER_H
-#define TEST_MANAGER_H
+#ifndef TEST_MANAGER__H
+#define TEST_MANAGER__H
 
 #include "defines.h"
 

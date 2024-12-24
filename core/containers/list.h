@@ -1,5 +1,5 @@
-#ifndef LIST_H
-#define LIST_H
+#ifndef LIST__H
+#define LIST__H
 
 #include "defines.h"
 
@@ -27,7 +27,7 @@ void list_remove(list* lst, u64 index);
 
 void list_clear(list* lst);
 
-u64 list_size(list* lst);
+u64 list_length(list* lst);
 
 void* list_data(list* lst, u64 index);
 

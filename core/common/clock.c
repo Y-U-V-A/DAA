@@ -1,7 +1,7 @@
 #include "clock.h"
 #include "platform.h"
 
-void clock_start(clock* clk) {
+void clock_set(clock* clk) {
     clk->start = platform_time();
 }
 

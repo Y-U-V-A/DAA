@@ -1,5 +1,5 @@
-#ifndef SET_H
-#define SET_H
+#ifndef SET__H
+#define SET__H
 
 #include "defines.h"
 
@@ -25,7 +25,7 @@ void set_insert(set* st, const void* data);
 
 void set_remove(set* st, const void* data);
 
-u64 set_size(set* st);
+u64 set_length(set* st);
 
 set_node* set_begin(set* st);
 

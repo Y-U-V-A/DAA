@@ -35,9 +35,9 @@ void test_manager_run() {
     LOGD("testing started...");
 
     clock clk_total;
-    clock_start(&clk_total);
+    clock_set(&clk_total);
 
-    u64 length = darray_size(test_manager);
+    u64 length = darray_length(test_manager);
 
     u32 passed = 0;
     u32 failed = 0;
@@ -46,7 +46,7 @@ void test_manager_run() {
     for (u64 i = 0; i < length; ++i) {
 
         clock clk;
-        clock_start(&clk);
+        clock_set(&clk);
 
         u32 result = test_manager[i].func();
 
@@ -60,7 +60,7 @@ void test_manager_run() {
         } else if (result == true) {
 
             passed += 1;
-            LOGT("test passed : %s ,time_s = %lf ", test_manager[i].msg, clk.elapsed);
+            LOGI("test passed : %s ,time_s = %lf ", test_manager[i].msg, clk.elapsed);
 
         } else {
 

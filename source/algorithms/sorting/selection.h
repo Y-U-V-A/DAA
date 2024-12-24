@@ -1,8 +1,8 @@
-#ifndef SELECTION_H
-#define SELECTION_H
+#ifndef SELECTION__H
+#define SELECTION__H
 
 #include "defines.h"
 
-void selection_run(const u32 buffer_size);
+void selection_run();
 
 #endif

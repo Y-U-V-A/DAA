@@ -20,7 +20,7 @@ u32 test_queue_int() {
     queue* que = queue_create(i32);
 
     // Test initial state
-    expect_should_be(0, queue_size(que));
+    expect_should_be(0, queue_length(que));
     expect_should_be(0, (u64)queue_front(que));
     expect_should_be(0, (u64)queue_back(que));
 
@@ -29,7 +29,7 @@ u32 test_queue_int() {
 
     for (u32 i = 0; i < 5; i++) {
         queue_push(que, &values[i]);
-        expect_should_be(i + 1, queue_size(que));
+        expect_should_be(i + 1, queue_length(que));
         expect_should_be(10, *(i32*)queue_front(que)); // First element should always be 10
         expect_should_be(values[i], *(i32*)queue_back(que));
     }
@@ -38,7 +38,7 @@ u32 test_queue_int() {
     for (u32 i = 0; i < 5; i++) {
         expect_should_be(values[i], *(i32*)queue_front(que));
         queue_pop(que);
-        expect_should_be(4 - i, queue_size(que));
+        expect_should_be(4 - i, queue_length(que));
     }
 
     queue_destroy(que);
@@ -54,13 +54,13 @@ u32 test_queue_double() {
     // Push and verify
     for (i32 i = 0; i < 4; i++) {
         queue_push(que, &values[i]);
-        expect_float_should_be(values[0], *(double*)queue_front(que));
-        expect_float_should_be(values[i], *(double*)queue_back(que));
+        expect_float_should_be(values[0], *(double*)queue_front(que), EPSILON);
+        expect_float_should_be(values[i], *(double*)queue_back(que), EPSILON);
     }
 
     // Pop and verify FIFO order
     for (i32 i = 0; i < 4; i++) {
-        expect_float_should_be(values[i], *(double*)queue_front(que));
+        expect_float_should_be(values[i], *(double*)queue_front(que), EPSILON);
         queue_pop(que);
     }
 
@@ -114,14 +114,14 @@ u32 test_queue_vector() {
         Vector3* back = (Vector3*)queue_back(que);
 
         // Verify front (should always be first vector)
-        expect_float_should_be(vectors[0].x, front->x);
-        expect_float_should_be(vectors[0].y, front->y);
-        expect_float_should_be(vectors[0].z, front->z);
+        expect_float_should_be(vectors[0].x, front->x, EPSILON);
+        expect_float_should_be(vectors[0].y, front->y, EPSILON);
+        expect_float_should_be(vectors[0].z, front->z, EPSILON);
 
         // Verify back (should be current vector)
-        expect_float_should_be(vectors[i].x, back->x);
-        expect_float_should_be(vectors[i].y, back->y);
-        expect_float_should_be(vectors[i].z, back->z);
+        expect_float_should_be(vectors[i].x, back->x, EPSILON);
+        expect_float_should_be(vectors[i].y, back->y, EPSILON);
+        expect_float_should_be(vectors[i].z, back->z, EPSILON);
     }
 
     queue_destroy(que);
@@ -140,15 +140,15 @@ u32 test_queue_edge_cases() {
     // Test single element
     i32 value = 42;
     queue_push(que, &value);
-    expect_should_be(1, queue_size(que));
+    expect_should_be(1, queue_length(que));
     expect_should_be(value, *(i32*)queue_front(que));
     expect_should_be(value, *(i32*)queue_back(que));
 
     // Test push after pop
     queue_pop(que);
-    expect_should_be(0, queue_size(que));
+    expect_should_be(0, queue_length(que));
     queue_push(que, &value);
-    expect_should_be(1, queue_size(que));
+    expect_should_be(1, queue_length(que));
     expect_should_be(value, *(i32*)queue_front(que));
 
     queue_destroy(que);

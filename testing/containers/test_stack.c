@@ -19,7 +19,7 @@ u32 test_stack_int() {
     stack* stk = stack_create(i32);
 
     // Test initial state
-    expect_should_be(0, stack_size(stk));
+    expect_should_be(0, stack_length(stk));
     expect_should_be(0, (u64)stack_top(stk));
 
     // Test push operations
@@ -27,7 +27,7 @@ u32 test_stack_int() {
 
     for (u32 i = 0; i < 5; i++) {
         stack_push(stk, &values[i]);
-        expect_should_be(i + 1, stack_size(stk));
+        expect_should_be(i + 1, stack_length(stk));
         expect_should_be(values[i], *(i32*)stack_top(stk));
     }
 
@@ -35,7 +35,7 @@ u32 test_stack_int() {
     for (i32 i = 4; i >= 0; i--) {
         expect_should_be(values[i], *(i32*)stack_top(stk));
         stack_pop(stk);
-        expect_should_be((u32)i, stack_size(stk));
+        expect_should_be((u32)i, stack_length(stk));
     }
 
     stack_destroy(stk);
@@ -51,12 +51,12 @@ u32 test_stack_float() {
     // Push and verify
     for (i32 i = 0; i < 4; i++) {
         stack_push(stk, &values[i]);
-        expect_float_should_be(values[i], *(f32*)stack_top(stk));
+        expect_float_should_be(values[i], *(f32*)stack_top(stk), EPSILON);
     }
 
     // Pop and verify
     for (i32 i = 3; i >= 0; i--) {
-        expect_float_should_be(values[i], *(f32*)stack_top(stk));
+        expect_float_should_be(values[i], *(f32*)stack_top(stk), EPSILON);
         stack_pop(stk);
     }
 
@@ -106,16 +106,16 @@ u32 test_stack_student() {
     for (u32 i = 0; i < 3; i++) {
         stack_push(stk, &students[i]);
         Student* top = (Student*)stack_top(stk);
-        expect_float_should_be(students[i].score, top->score);
+        expect_float_should_be(students[i].score, top->score, EPSILON);
         // Note: String comparison would need a separate function
         // For now we'll just verify the size
-        expect_should_be(stack_size(stk), i + 1);
+        expect_should_be(stack_length(stk), i + 1);
     }
 
     // Pop and verify students
     for (i32 i = 2; i >= 0; i--) {
         Student* top = (Student*)stack_top(stk);
-        expect_float_should_be(students[i].score, top->score);
+        expect_float_should_be(students[i].score, top->score, EPSILON);
         stack_pop(stk);
     }
 

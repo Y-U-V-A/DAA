@@ -1,7 +1,8 @@
 #include "kth_smallest.h"
 #include "priority_queue.h"
 #include "logger.h"
-#include "common.h"
+#include "zmemory.h"
+#include "utils.h"
 
 bool int_cmp_smallest(const void* parent, const void* child) {
     return *(i32*)parent >= *(i32*)child;
@@ -33,31 +34,31 @@ i32 kth_smallest(i32* arr, i32 n, i32 k) {
     return result;
 }
 
-void kth_smallest_run(const u32 buffer_size) {
+void kth_smallest_run() {
 
-    seed_random();
+    random_seed();
 
-    const i32 n = generate_random(30);
+    const i32 n = random_int(0, 30);
     i32 arr[n];
 
-    char* buffer = memory_allocate(buffer_size * sizeof(char), MEMORY_TAG_ALGORITHM);
+    char* buffer = zmemory_allocate(n * sizeof(char) + 1024, MEMORY_TAG_ALGORITHM);
 
-    u32 offset = log_buffer(buffer, buffer_size, "size = %d ,array = ", n);
+    u32 offset = log_buffer(buffer, n, "size = %d ,array = ", n);
 
     for (i32 i = 0; i < n; ++i) {
-        arr[i] = generate_random(200);
-        offset += log_buffer(buffer + offset, buffer_size - offset, "%d,", arr[i]);
+        arr[i] = random_int(0, 200);
+        offset += log_buffer(buffer + offset, n - offset, "%d,", arr[i]);
     }
     buffer[offset++] = '\n';
     buffer[offset++] = '\0';
     LOGI("%s", buffer);
 
-    i32 times = generate_random(n);
+    i32 times = random_int(0, n);
     for (i32 i = 0; i < times; ++i) {
-        i32 k = generate_random(n - 1);
+        i32 k = random_int(0, n - 1);
         i32 result = kth_smallest(arr, n, k);
         LOGI("%dth smallest = %d", k, result);
     }
 
-    memory_free(buffer, buffer_size * sizeof(char), MEMORY_TAG_ALGORITHM);
+    zmemory_free(buffer, n * sizeof(char), MEMORY_TAG_ALGORITHM);
 }

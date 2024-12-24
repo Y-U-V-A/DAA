@@ -1,8 +1,8 @@
-#ifndef RADIX_H
-#define RADIX_H
+#ifndef RADIX__H
+#define RADIX__H
 
 #include "defines.h"
 
-void radix_run(const u32 buffer_size);
+void radix_run();
 
 #endif

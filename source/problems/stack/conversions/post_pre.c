@@ -1,7 +1,8 @@
 #include "post_pre.h"
 #include "stack.h"
 #include "logger.h"
-#include "common.h"
+#include "zmemory.h"
+#include "utils.h"
 
 typedef struct string {
     char buffer[100];

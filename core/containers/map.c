@@ -1,6 +1,20 @@
 #include "map.h"
-#include "common.h"
+#include "zmemory.h"
 #include "logger.h"
+
+////////////////////////////////////////
+//  _____  ____    ______    ______   //
+// /     \/    \  /      \  /      \  //
+// $$$$$$ $$$$  | $$$$$$  |/$$$$$$  | //
+// $$ | $$ | $$ | /    $$ |$$ |  $$ | //
+// $$ | $$ | $$ |/$$$$$$$ |$$ |__$$ | //
+// $$ | $$ | $$ |$$    $$ |$$    $$/  //
+// $$/  $$/  $$/  $$$$$$$/ $$$$$$$/   //
+//                         $$ |       //
+//                         $$ |       //
+//                         $$/        //
+//                                    //
+////////////////////////////////////////
 
 map_node* create_map_node(const void* key, const void* data, u64 key_stride, u64 data_stride);
 void destroy_map_node(map_node* node, u64 key_stride, u64 data_stride);
@@ -14,17 +28,17 @@ void insert_fix_up_map_node(map* mp, map_node* node);
 
 void remove_fix_up_map_node(map* mp, map_node* node);
 
-struct map {
+typedef struct map {
     map_node* root;
     u64 size;
     u64 key_stride;
     u64 data_stride;
     PFN_map_cmp cmp_func;
-};
+} map;
 
 map* _map_create(u64 key_stride, u64 data_stride, PFN_map_cmp cmp_func) {
 
-    map* temp = memory_allocate(sizeof(map), MEMORY_TAG_MAP);
+    map* temp = zmemory_allocate(sizeof(map), MEMORY_TAG_MAP);
     temp->root = 0;
     temp->size = 0;
     temp->key_stride = key_stride;
@@ -38,7 +52,7 @@ void map_destroy(map* mp) {
     if (mp->root) {
         destroy_map_node(mp->root, mp->key_stride, mp->data_stride);
     }
-    memory_free(mp, sizeof(map), MEMORY_TAG_MAP);
+    zmemory_free(mp, sizeof(map), MEMORY_TAG_MAP);
 }
 
 void map_insert(map* mp, const void* key, const void* data) {
@@ -52,8 +66,8 @@ void map_insert(map* mp, const void* key, const void* data) {
 
         while (temp) {
 
-            if (memory_compare(temp->key, key, mp->key_stride) == 0) {
-                memory_copy(temp->data, data, mp->data_stride);
+            if (zmemory_compare(temp->key, key, mp->key_stride) == 0) {
+                zmemory_copy(temp->data, data, mp->data_stride);
                 destroy_map_node(node, mp->key_stride, mp->data_stride);
                 return;
             }
@@ -88,12 +102,12 @@ void map_remove(map* mp, const void* key) {
 
     map_node* node = mp->root;
 
-    void* k = memory_allocate(mp->key_stride, MEMORY_TAG_MAP);
-    memory_copy(k, key, mp->key_stride);
+    void* k = zmemory_allocate(mp->key_stride, MEMORY_TAG_MAP);
+    zmemory_copy(k, key, mp->key_stride);
 
     while (node) {
 
-        if (memory_compare(node->key, k, mp->key_stride) == 0) {
+        if (zmemory_compare(node->key, k, mp->key_stride) == 0) {
 
             if (node->left == 0 && node->right == 0) {
 
@@ -116,7 +130,7 @@ void map_remove(map* mp, const void* key) {
 
                 mp->size -= 1;
 
-                memory_free(k, mp->key_stride, MEMORY_TAG_MAP);
+                zmemory_free(k, mp->key_stride, MEMORY_TAG_MAP);
 
                 return;
 
@@ -127,10 +141,10 @@ void map_remove(map* mp, const void* key) {
                     prev = prev->right;
                 }
 
-                memory_copy(node->key, prev->key, mp->key_stride);
-                memory_copy(node->data, prev->data, mp->data_stride);
+                zmemory_copy(node->key, prev->key, mp->key_stride);
+                zmemory_copy(node->data, prev->data, mp->data_stride);
 
-                memory_copy(k, prev->key, mp->key_stride);
+                zmemory_copy(k, prev->key, mp->key_stride);
 
                 node = node->left;
 
@@ -141,10 +155,10 @@ void map_remove(map* mp, const void* key) {
                     next = next->left;
                 }
 
-                memory_copy(node->key, next->key, mp->key_stride);
-                memory_copy(node->data, next->data, mp->data_stride);
+                zmemory_copy(node->key, next->key, mp->key_stride);
+                zmemory_copy(node->data, next->data, mp->data_stride);
 
-                memory_copy(k, next->key, mp->key_stride);
+                zmemory_copy(k, next->key, mp->key_stride);
                 node = node->right;
             }
 
@@ -160,12 +174,12 @@ void map_remove(map* mp, const void* key) {
 
     LOGW("map_remove : invalid key");
 
-    memory_free(k, mp->key_stride, MEMORY_TAG_MAP);
+    zmemory_free(k, mp->key_stride, MEMORY_TAG_MAP);
 
     return;
 }
 
-u64 map_size(map* mp) {
+u64 map_length(map* mp) {
     return mp->size;
 }
 
@@ -180,7 +194,7 @@ void* map_data(map* mp, const void* key) {
 
     while (temp) {
 
-        if (memory_compare(temp->key, key, mp->key_stride) == 0) {
+        if (zmemory_compare(temp->key, key, mp->key_stride) == 0) {
             return temp->data;
         }
 
@@ -220,7 +234,7 @@ map_node* map_next(map* mp, map_node* node) {
 
     while (temp) {
 
-        if (memory_compare(temp->key, node->key, mp->key_stride) == 0) {
+        if (zmemory_compare(temp->key, node->key, mp->key_stride) == 0) {
             break;
         }
 
@@ -247,7 +261,7 @@ bool map_contains(map* mp, const void* key) {
     map_node* temp = mp->root;
     while (temp) {
 
-        if (memory_compare(temp->key, key, mp->key_stride) == 0) {
+        if (zmemory_compare(temp->key, key, mp->key_stride) == 0) {
             return true;
         }
 
@@ -261,16 +275,31 @@ bool map_contains(map* mp, const void* key) {
     }
     return false;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////
+//  __                  __                                          //
+// /  |                /  |                                         //
+// $$ |____    ______  $$ |  ______    ______    ______    _______  //
+// $$      \  /      \ $$ | /      \  /      \  /      \  /       | //
+// $$$$$$$  |/$$$$$$  |$$ |/$$$$$$  |/$$$$$$  |/$$$$$$  |/$$$$$$$/  //
+// $$ |  $$ |$$    $$ |$$ |$$ |  $$ |$$    $$ |$$ |  $$/ $$      \  //
+// $$ |  $$ |$$$$$$$$/ $$ |$$ |__$$ |$$$$$$$$/ $$ |       $$$$$$  | //
+// $$ |  $$ |$$       |$$ |$$    $$/ $$       |$$ |      /     $$/  //
+// $$/   $$/  $$$$$$$/ $$/ $$$$$$$/   $$$$$$$/ $$/       $$$$$$$/   //
+//                         $$ |                                     //
+//                         $$ |                                     //
+//                         $$/                                      //
+//                                                                  //
+//////////////////////////////////////////////////////////////////////
 
 map_node* create_map_node(const void* key, const void* data, u64 key_stride, u64 data_stride) {
-    map_node* temp = memory_allocate(sizeof(map_node), MEMORY_TAG_MAP);
+    map_node* temp = zmemory_allocate(sizeof(map_node), MEMORY_TAG_MAP);
 
-    temp->key = memory_allocate(key_stride, MEMORY_TAG_MAP);
-    memory_copy(temp->key, key, key_stride);
+    temp->key = zmemory_allocate(key_stride, MEMORY_TAG_MAP);
+    zmemory_copy(temp->key, key, key_stride);
 
-    temp->data = memory_allocate(data_stride, MEMORY_TAG_MAP);
-    memory_copy(temp->data, data, data_stride);
+    temp->data = zmemory_allocate(data_stride, MEMORY_TAG_MAP);
+    zmemory_copy(temp->data, data, data_stride);
 
     temp->left = 0;
     temp->right = 0;
@@ -288,9 +317,9 @@ void destroy_map_node(map_node* node, u64 key_stride, u64 data_stride) {
     destroy_map_node(node->left, key_stride, data_stride);
     destroy_map_node(node->right, key_stride, data_stride);
 
-    memory_free(node->key, key_stride, MEMORY_TAG_MAP);
-    memory_free(node->data, data_stride, MEMORY_TAG_MAP);
-    memory_free(node, sizeof(map_node), MEMORY_TAG_MAP);
+    zmemory_free(node->key, key_stride, MEMORY_TAG_MAP);
+    zmemory_free(node->data, data_stride, MEMORY_TAG_MAP);
+    zmemory_free(node, sizeof(map_node), MEMORY_TAG_MAP);
 }
 
 // node will become left child of node's right child ,
@@ -406,8 +435,6 @@ void insert_fix_up_map_node(map* mp, map_node* node) {
         node->is_red = 0;
     }
 }
-
-// TODO: fix this
 
 void remove_fix_up_map_node(map* mp, map_node* node) {
 

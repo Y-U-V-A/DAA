@@ -1,5 +1,5 @@
-#ifndef TEST_SET_H
-#define TEST_SET_H
+#ifndef TEST_SET__H
+#define TEST_SET__H
 
 void register_set_tests();
 

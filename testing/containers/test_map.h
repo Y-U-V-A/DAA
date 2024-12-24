@@ -1,5 +1,5 @@
-#ifndef TEST_MAP_H
-#define TEST_MAP_H
+#ifndef TEST_MAP__H
+#define TEST_MAP__H
 
 void register_map_tests();
 

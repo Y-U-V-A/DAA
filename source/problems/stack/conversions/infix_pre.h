@@ -1,5 +1,5 @@
-#ifndef INFIX_PRE_H
-#define INFIX_PRE_H
+#ifndef INFIX_PRE__H
+#define INFIX_PRE__H
 
 void infix_pre_run();
 

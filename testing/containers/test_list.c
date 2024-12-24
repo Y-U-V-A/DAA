@@ -28,7 +28,7 @@ bool list_compare_students_by_id(const void* a, const void* b) {
 u32 test_list_init() {
     list* lst = list_create(i32);
 
-    expect_should_be(0, list_size(lst));
+    expect_should_be(0, list_length(lst));
 
     list_destroy(lst);
     return true;
@@ -43,7 +43,7 @@ u32 test_list_push_back_ints() {
         list_push_back(lst, &values[i]);
     }
 
-    expect_should_be(5, list_size(lst));
+    expect_should_be(5, list_length(lst));
 
     // Verify values in order
     for (i32 i = 0; i < 5; i++) {
@@ -63,7 +63,7 @@ u32 test_list_push_front_ints() {
         list_push_front(lst, &values[i]);
     }
 
-    expect_should_be(3, list_size(lst));
+    expect_should_be(3, list_length(lst));
 
     // Values should be in reverse order due to push_front
     i32* first = (i32*)list_data(lst, 0);
@@ -83,14 +83,14 @@ u32 test_list_pop_operations() {
 
     // Test pop_back
     list_pop_back(lst);
-    expect_should_be(3, list_size(lst));
+    expect_should_be(3, list_length(lst));
 
     i32* last = (i32*)list_data(lst, 2);
     expect_should_be(3, *last);
 
     // Test pop_front
     list_pop_front(lst);
-    expect_should_be(2, list_size(lst));
+    expect_should_be(2, list_length(lst));
 
     i32* new_first = (i32*)list_data(lst, 0);
     expect_should_be(2, *new_first);
@@ -110,14 +110,14 @@ u32 test_list_insert_remove() {
     // Test insert
     i32 insert_val = 42;
     list_insert(lst, 1, &insert_val);
-    expect_should_be(4, list_size(lst));
+    expect_should_be(4, list_length(lst));
 
     i32* inserted = (i32*)list_data(lst, 1);
     expect_should_be(42, *inserted);
 
     // Test remove
     list_remove(lst, 1);
-    expect_should_be(3, list_size(lst));
+    expect_should_be(3, list_length(lst));
 
     i32* after_remove = (i32*)list_data(lst, 1);
     expect_should_be(2, *after_remove);
@@ -180,7 +180,7 @@ u32 test_list_unique_ints() {
     list_sort(lst, list_compare_ints);
     list_unique(lst, list_unique_ints);
 
-    expect_should_be(3, list_size(lst));
+    expect_should_be(3, list_length(lst));
 
     i32* first = (i32*)list_data(lst, 0);
     i32* second = (i32*)list_data(lst, 1);
@@ -205,12 +205,12 @@ u32 test_list_struct_operations() {
     list_push_back(lst, &s1);
     list_push_back(lst, &s2);
 
-    expect_should_be(2, list_size(lst));
+    expect_should_be(2, list_length(lst));
 
     // Test struct data retrieval
     Student* retrieved = (Student*)list_data(lst, 0);
     expect_should_be(1, retrieved->id);
-    expect_float_should_be(85.5f, retrieved->score);
+    expect_float_should_be(85.5f, retrieved->score, EPSILON);
 
     // Test sorting structs
     list_sort(lst, list_compare_students_by_id);
@@ -239,7 +239,7 @@ u32 test_list_merge_operations() {
 
     list_merge(lst1, lst2, list_compare_ints);
 
-    expect_should_be(6, list_size(lst1));
+    expect_should_be(6, list_length(lst1));
 
     // Verify merged list is sorted
     i32 prev_val = -1;

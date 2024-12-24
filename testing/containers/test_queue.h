@@ -1,5 +1,5 @@
-#ifndef TEST_QUEUE_H
-#define TEST_QUEUE_H
+#ifndef TEST_QUEUE__H
+#define TEST_QUEUE__H
 
 void register_queue_tests();
 

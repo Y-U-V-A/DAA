@@ -1,5 +1,5 @@
-#ifndef UNORDERED_SET_H
-#define UNORDERED_SET_H
+#ifndef UNORDERED_SET__H
+#define UNORDERED_SET__H
 
 #include "defines.h"
 
@@ -27,7 +27,7 @@ void unordered_set_remove(unordered_set* un_set, const void* data);
 
 unordered_set* unordered_set_resize(unordered_set* un_set);
 
-u64 unordered_set_size(unordered_set* un_set);
+u64 unordered_set_length(unordered_set* un_set);
 
 u64 unordered_set_capacity(unordered_set* un_set);
 

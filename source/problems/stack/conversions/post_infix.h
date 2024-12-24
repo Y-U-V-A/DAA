@@ -1,5 +1,5 @@
-#ifndef POST_INFIX_H
-#define POST_INFIX_H
+#ifndef POST_INFIX__H
+#define POST_INFIX__H
 
 void post_infix_run();
 

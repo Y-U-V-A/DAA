@@ -1,7 +1,8 @@
 #include "infix_pre.h"
 #include "stack.h"
 #include "logger.h"
-#include "common.h"
+#include "zmemory.h"
+#include "utils.h"
 
 i32 get_priority_pre(char op) {
 
@@ -38,7 +39,7 @@ void infix_pre(const char* infix_exp, char* pre_exp) {
 
         } else if (infix_exp[i] == '+' || infix_exp[i] == '-' || infix_exp[i] == '*' || infix_exp[i] == '/' || infix_exp[i] == '^') {
 
-            while (stack_size(stk) != 0 && get_priority_pre(*(char*)stack_top(stk)) > get_priority_pre(infix_exp[i])) {
+            while (stack_length(stk) != 0 && get_priority_pre(*(char*)stack_top(stk)) > get_priority_pre(infix_exp[i])) {
                 buffer[j++] = *(char*)stack_top(stk);
                 stack_pop(stk);
             }
@@ -46,7 +47,7 @@ void infix_pre(const char* infix_exp, char* pre_exp) {
 
         } else if (infix_exp[i] == '(') {
 
-            while (stack_size(stk) != 0 && *(char*)stack_top(stk) != ')') {
+            while (stack_length(stk) != 0 && *(char*)stack_top(stk) != ')') {
                 buffer[j++] = *(char*)stack_top(stk);
                 stack_pop(stk);
             }
@@ -54,7 +55,7 @@ void infix_pre(const char* infix_exp, char* pre_exp) {
         }
     }
 
-    while (stack_size(stk) != 0) {
+    while (stack_length(stk) != 0) {
         buffer[j++] = *(char*)stack_top(stk);
         stack_pop(stk);
     }

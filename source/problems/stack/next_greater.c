@@ -1,14 +1,15 @@
 #include "next_greater.h"
 #include "stack.h"
 #include "logger.h"
-#include "common.h"
+#include "zmemory.h"
+#include "utils.h"
 
 void next_greater() {
 
     const i32 n = 20;
     i32 array[n];
     for (i32 i = 0; i < n; ++i) {
-        array[i] = generate_random(100);
+        array[i] = random_int(0, 100);
     }
 
     stack* stk = stack_create(i32);
@@ -17,13 +18,13 @@ void next_greater() {
 
     for (i32 i = 2 * n - 1; i >= 0; --i) {
 
-        while (stack_size(stk) != 0 && *(i32*)stack_top(stk) <= array[i % n]) {
+        while (stack_length(stk) != 0 && *(i32*)stack_top(stk) <= array[i % n]) {
             stack_pop(stk);
             result[i % n] = -1;
         }
 
         if (i < n) {
-            if (stack_size(stk) == 0) {
+            if (stack_length(stk) == 0) {
                 result[i % n] = -1;
             } else {
                 result[i % n] = *(i32*)stack_top(stk);
@@ -56,7 +57,7 @@ void next_greater() {
 
 void next_greater_run() {
 
-    seed_random();
+    random_seed();
 
     for (i32 i = 0; i < 20; ++i) {
         next_greater();

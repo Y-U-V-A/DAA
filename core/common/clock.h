@@ -1,5 +1,5 @@
-#ifndef CLOCK_H
-#define CLOCK_H
+#ifndef CLOCK__H
+#define CLOCK__H
 
 #include "defines.h"
 
@@ -8,7 +8,7 @@ typedef struct clock {
     f64 elapsed;
 } clock;
 
-void clock_start(clock* clk);
+void clock_set(clock* clk);
 
 void clock_update(clock* clk);
 

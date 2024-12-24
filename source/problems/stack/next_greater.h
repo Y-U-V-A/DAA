@@ -1,5 +1,5 @@
-#ifndef NEXT_GREATER_H
-#define NEXT_GREATER_H
+#ifndef NEXT_GREATER__H
+#define NEXT_GREATER__H
 
 void next_greater_run();
 

@@ -20,7 +20,7 @@ u32 test_unmap_int_keys_and_values() {
     unordered_map_insert(map, &key2, &value2);
 
     // Test size
-    expect_should_be(2, unordered_map_size(map));
+    expect_should_be(2, unordered_map_length(map));
 
     // Test retrieval
     i32* retrieved1 = (i32*)unordered_map_data(map, &key1);
@@ -35,7 +35,7 @@ u32 test_unmap_int_keys_and_values() {
 
     // Test removal
     unordered_map_remove(map, &key1);
-    expect_should_be(1, unordered_map_size(map));
+    expect_should_be(1, unordered_map_length(map));
     expect_should_be(false, unordered_map_contains(map, &key1));
 
     unordered_map_destroy(map);
@@ -52,19 +52,19 @@ u32 test_unmap_float_keys_and_values() {
     unordered_map_insert(map, &key2, &value2);
 
     // Test size
-    expect_should_be(2, unordered_map_size(map));
+    expect_should_be(2, unordered_map_length(map));
 
     // Test retrieval
     f32* retrieved1 = (f32*)unordered_map_data(map, &key1);
     f32* retrieved2 = (f32*)unordered_map_data(map, &key2);
-    expect_float_should_be(value1, *retrieved1);
-    expect_float_should_be(value2, *retrieved2);
+    expect_float_should_be(value1, *retrieved1, EPSILON);
+    expect_float_should_be(value2, *retrieved2, EPSILON);
 
     // Test update
     f32 new_value = 10.0f;
     unordered_map_insert(map, &key1, &new_value);
     f32* updated = (f32*)unordered_map_data(map, &key1);
-    expect_float_should_be(new_value, *updated);
+    expect_float_should_be(new_value, *updated, EPSILON);
 
     unordered_map_destroy(map);
     return true;
@@ -83,12 +83,12 @@ u32 test_unmap_struct_keys_and_values() {
     unordered_map_insert(map, &key2, &value2);
 
     // Test size
-    expect_should_be(2, unordered_map_size(map));
+    expect_should_be(2, unordered_map_length(map));
 
     // Test retrieval
     test_struct* retrieved1 = (test_struct*)unordered_map_data(map, &key1);
     expect_should_be(value1.id, retrieved1->id);
-    expect_float_should_be(value1.value, retrieved1->value);
+    expect_float_should_be(value1.value, retrieved1->value, EPSILON);
 
     // Test collision handling
     test_struct key3 = {3, 3.3f, "Third"};
@@ -97,7 +97,7 @@ u32 test_unmap_struct_keys_and_values() {
 
     test_struct* retrieved3 = (test_struct*)unordered_map_data(map, &key3);
     expect_should_be(value3.id, retrieved3->id);
-    expect_float_should_be(value3.value, retrieved3->value);
+    expect_float_should_be(value3.value, retrieved3->value, EPSILON);
 
     unordered_map_destroy(map);
     return true;

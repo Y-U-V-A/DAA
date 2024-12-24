@@ -22,11 +22,11 @@ u32 test_unset_int() {
     unordered_set_insert(set, &value3);
 
     // Test size
-    expect_should_be(3, unordered_set_size(set));
+    expect_should_be(3, unordered_set_length(set));
 
     // Test duplicate insertion
     unordered_set_insert(set, &value1); // Should not increase size
-    expect_should_be(3, unordered_set_size(set));
+    expect_should_be(3, unordered_set_length(set));
 
     // Test contains
     expect_should_be(true, unordered_set_contains(set, &value1));
@@ -38,7 +38,7 @@ u32 test_unset_int() {
 
     // Test removal
     unordered_set_remove(set, &value2);
-    expect_should_be(2, unordered_set_size(set));
+    expect_should_be(2, unordered_set_length(set));
     expect_should_be(false, unordered_set_contains(set, &value2));
 
     unordered_set_destroy(set);
@@ -58,7 +58,7 @@ u32 test_unset_float() {
     unordered_set_insert(set, &value3);
 
     // Test size
-    expect_should_be(3, unordered_set_size(set));
+    expect_should_be(3, unordered_set_length(set));
 
     // Test contains with floating point values
     expect_should_be(true, unordered_set_contains(set, &value1));
@@ -68,7 +68,7 @@ u32 test_unset_float() {
 
     // Test duplicate insertion with floating point
     unordered_set_insert(set, &value2); // Should not increase size
-    expect_should_be(3, unordered_set_size(set));
+    expect_should_be(3, unordered_set_length(set));
 
     unordered_set_destroy(set);
     return true;
@@ -87,19 +87,19 @@ u32 test_unset_struct() {
     unordered_set_insert(set, &value3);
 
     // Test size
-    expect_should_be(3, unordered_set_size(set));
+    expect_should_be(3, unordered_set_length(set));
 
     // Test contains with struct
     expect_should_be(true, unordered_set_contains(set, &value1));
 
     // Test duplicate insertion with struct
     unordered_set_insert(set, &value1); // Should not increase size
-    expect_should_be(3, unordered_set_size(set));
+    expect_should_be(3, unordered_set_length(set));
 
     // Test struct with same id but different values
     test_struct similar_value = {1, 9.9f, "Different"};
     unordered_set_insert(set, &similar_value); // Should be treated as different
-    expect_should_be(4, unordered_set_size(set));
+    expect_should_be(4, unordered_set_length(set));
 
     unordered_set_destroy(set);
     return true;
@@ -122,7 +122,7 @@ u32 test_unset_resize_functionality() {
     expect_should_be(true, unordered_set_capacity(set) > UNORDERED_SET_DEFAULT_SIZE);
 
     // Verify size is correct
-    expect_should_be(30, unordered_set_size(set));
+    expect_should_be(30, unordered_set_length(set));
 
     unordered_set_destroy(set);
     return true;

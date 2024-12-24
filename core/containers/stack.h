@@ -1,5 +1,5 @@
-#ifndef STACK_H
-#define STACK_H
+#ifndef STACK__H
+#define STACK__H
 
 #include "defines.h"
 
@@ -17,6 +17,6 @@ void stack_pop(stack* stk);
 
 void* stack_top(stack* stk);
 
-u64 stack_size(stack* stk);
+u64 stack_length(stack* stk);
 
 #endif
