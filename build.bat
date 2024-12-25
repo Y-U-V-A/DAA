@@ -27,8 +27,10 @@ if %ERRORLEVEL% neq 0 (
     exit /b
 )
 
-if "%1"=="testing" set "TESTING=1"
-if "%1"=="source" set "SOURCE=1"
+if "%1"=="source" (
+    set "SOURCE=1"
+) 
+if "%1"=="testing" set "testing=1"
 if "%1"=="run" set "RUN=1"
 
 if "%2"=="build" set "BUILD=1"
@@ -44,12 +46,10 @@ if defined BUILD (
     )
 )
 
-
-
-echo #include "includes.h" > source/main.c
-echo int main() {zmemory_init();zmemory_log();logger_init(1024 * 1024);%3_run();logger_shutdown();zmemory_log();zmemory_destroy();return 0;} >> source/main.c
-
-
+echo #include "includes.h">source/main.c
+echo int main() { zmemory_init(); zmemory_log(); logger_init(1024 * 1024); %3_run(); logger_shutdown(); zmemory_log(); zmemory_destroy(); return 0; }>>source/main.c
+    
+    
 :: Running the executable if requested
 if defined RUN (
     if exist .\bin\win32\EXE.exe (

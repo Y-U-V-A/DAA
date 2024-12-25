@@ -69,25 +69,30 @@ case "$2" in
 esac
 
 # Check if filename is provided for build command
-if [ $BUILD -eq 1 ] && [ -z "$3" ]; then
-    echo "Please provide the filename to run"
-    exit 1
-fi
-
-# Generate main.c
+if [ $BUILD -eq 1 ]; then
+    if [ -z "$3" ]; then
+        echo "Please provide the filename to build"
+        exit 1
+    fi
 cat > source/main.c << EOL
 #include "includes.h"
 int main() {
     zmemory_init();
     zmemory_log();
     logger_init(1024 * 1024);
-    ${3}_run();
+    $3_run();
     logger_shutdown();
     zmemory_log();
     zmemory_destroy();
     return 0;
 }
 EOL
+
+fi
+
+
+
+
 
 # Run executable if requested
 if [ $RUN -eq 1 ]; then
