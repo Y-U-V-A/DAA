@@ -1,6 +1,11 @@
 #!/bin/bash
 
 # Commands:
+# ./build.sh source build <filename> -> to generate the obj files in bin_int and exe file in bin
+# ./build.sh source clear -> to delete bin_int and bin
+# ./build.sh source clear_bin -> to delete bin
+# ./build.sh source clear_bin_int -> to delete bin_int
+# ./build.sh source info -> debugging information
 # ./build.sh testing build -> to generate the obj files in bin_int and exe file in bin
 # ./build.sh testing clear -> to delete bin_int and bin
 # ./build.sh testing clear_bin -> to delete bin
@@ -14,29 +19,34 @@ if ! command -v clang &> /dev/null; then
     exit 1
 fi
 
-clang --version &> /dev/null
-if [ $? -ne 0 ]; then
+# Check clang version
+if ! clang --version &> /dev/null; then
     echo "Add path of clang to environment variable PATH"
     exit 1
 fi
 
-# Parse arguments
+# Initialize variables
 TESTING=0
 SOURCE=0
+RUN=0
 BUILD=0
 CLEAR=0
 CLEAR_BIN=0
 CLEAR_BIN_INT=0
 INFO=0
-RUN=0
 
-if [ "$1" = "testing" ]; then
-    TESTING=1
-elif [ "$1" = "source" ]; then
-    SOURCE=1
-elif [ "$1" = "run" ]; then
-    RUN=1
-fi
+# Parse command line arguments
+case "$1" in
+    "testing")
+        TESTING=1
+        ;;
+    "source")
+        SOURCE=1
+        ;;
+    "run")
+        RUN=1
+        ;;
+esac
 
 case "$2" in
     "build")
@@ -44,6 +54,8 @@ case "$2" in
         ;;
     "clear")
         CLEAR=1
+        CLEAR_BIN=1
+        CLEAR_BIN_INT=1
         ;;
     "clear_bin")
         CLEAR_BIN=1
@@ -56,7 +68,28 @@ case "$2" in
         ;;
 esac
 
-# Running the executable if requested
+# Check if filename is provided for build command
+if [ $BUILD -eq 1 ] && [ -z "$3" ]; then
+    echo "Please provide the filename to run"
+    exit 1
+fi
+
+# Generate main.c
+cat > source/main.c << EOL
+#include "includes.h"
+int main() {
+    zmemory_init();
+    zmemory_log();
+    logger_init(1024 * 1024);
+    ${3}_run();
+    logger_shutdown();
+    zmemory_log();
+    zmemory_destroy();
+    return 0;
+}
+EOL
+
+# Run executable if requested
 if [ $RUN -eq 1 ]; then
     if [ -f "./bin/linux/EXE" ]; then
         ./bin/linux/EXE
@@ -66,37 +99,42 @@ if [ $RUN -eq 1 ]; then
     fi
 fi
 
-# Building or cleaning testing files
+ARCH=$(uname -m)
+
+# Handle testing commands
 if [ $TESTING -eq 1 ]; then
-    CODE_DIRS="testing core"
+    if [ $BUILD -eq 1 ]; then
+        make -f build.mak all CODE_DIRS="testing core" BIN_INT_DIR="linux" BIN_DIR="linux" ARCH="$ARCH"
+    fi
+    if [ $INFO -eq 1 ]; then
+        make -f build.mak info CODE_DIRS="testing core" BIN_INT_DIR="linux" BIN_DIR="linux" ARCH="$ARCH"
+    fi
+    if [ $CLEAR -eq 1 ]; then
+        make -f build.mak clear CODE_DIRS="testing core" BIN_INT_DIR="linux" BIN_DIR="linux" ARCH="$ARCH"
+    fi
+    if [ $CLEAR_BIN -eq 1 ]; then
+        make -f build.mak clear_bin CODE_DIRS="testing core" BIN_INT_DIR="linux" BIN_DIR="linux" ARCH="$ARCH"
+    fi
+    if [ $CLEAR_BIN_INT -eq 1 ]; then
+        make -f build.mak clear_bin_int CODE_DIRS="testing core" BIN_INT_DIR="linux" BIN_DIR="linux" ARCH="$ARCH"
+    fi
 fi
 
-# Building or cleaning source files
+# Handle source commands
 if [ $SOURCE -eq 1 ]; then
-    CODE_DIRS="core source"
+    if [ $BUILD -eq 1 ]; then
+        make -f build.mak all CODE_DIRS="core source" BIN_INT_DIR="linux" BIN_DIR="linux" ARCH="$ARCH"
+    fi
+    if [ $INFO -eq 1 ]; then
+        make -f build.mak info CODE_DIRS="core source" BIN_INT_DIR="linux" BIN_DIR="linux" ARCH="$ARCH"
+    fi
+    if [ $CLEAR -eq 1 ]; then
+        make -f build.mak clear CODE_DIRS="core source" BIN_INT_DIR="linux" BIN_DIR="linux" ARCH="$ARCH"
+    fi
+    if [ $CLEAR_BIN -eq 1 ]; then
+        make -f build.mak clear_bin CODE_DIRS="core source" BIN_INT_DIR="linux" BIN_DIR="linux" ARCH="$ARCH"
+    fi
+    if [ $CLEAR_BIN_INT -eq 1 ]; then
+        make -f build.mak clear_bin_int CODE_DIRS="core source" BIN_INT_DIR="linux" BIN_DIR="linux" ARCH="$ARCH"
+    fi
 fi
-
-BIN_INT_DIR="linux"  # Adjusted from win32
-BIN_DIR="linux"      # Adjusted from win32
-ARCH=$(uname -m)     # Equivalent to %PROCESSOR_ARCHITECTURE%
-
-if [ $BUILD -eq 1 ]; then
-    make -f build.mak all CODE_DIRS="$CODE_DIRS" BIN_INT_DIR="$BIN_INT_DIR" BIN_DIR="$BIN_DIR" ARCH="$ARCH"
-fi
-
-if [ $INFO -eq 1 ]; then
-    make -f build.mak info CODE_DIRS="$CODE_DIRS" BIN_INT_DIR="$BIN_INT_DIR" BIN_DIR="$BIN_DIR" ARCH="$ARCH"
-fi
-
-if [ $CLEAR -eq 1 ]; then
-    make -f build.mak clear CODE_DIRS="$CODE_DIRS" BIN_INT_DIR="$BIN_INT_DIR" BIN_DIR="$BIN_DIR" ARCH="$ARCH"
-fi
-
-if [ $CLEAR_BIN -eq 1 ]; then
-    make -f build.mak clear_bin CODE_DIRS="$CODE_DIRS" BIN_INT_DIR="$BIN_INT_DIR" BIN_DIR="$BIN_DIR" ARCH="$ARCH"
-fi
-
-if [ $CLEAR_BIN_INT -eq 1 ]; then
-    make -f build.mak clear_bin_int CODE_DIRS="$CODE_DIRS" BIN_INT_DIR="$BIN_INT_DIR" BIN_DIR="$BIN_DIR" ARCH="$ARCH"
-fi
-

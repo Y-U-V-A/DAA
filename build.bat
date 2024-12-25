@@ -1,11 +1,16 @@
 @echo off
 
 ::commands
-::./build.bat TESTINGing build -> to generate the obj files in bin_int and exe file in bin
-::./build.bat TESTINGing clear -> to delete bin_int and bin
-::./build.bat TESTINGing clear_bin -> to delete bin
-::./build.bat TESTINGing clear_bin_int -> to delete bin_int
-::./build.bat TESTINGing info -> debugging information
+::./build.bat source build <filename> -> to generate the obj files in bin_int and exe file in bin
+::./build.bat source clear -> to delete bin_int and bin
+::./build.bat source clear_bin -> to delete bin
+::./build.bat source clear_bin_int -> to delete bin_int
+::./build.bat source info -> debugging information
+::./build.bat testing build -> to generate the obj files in bin_int and exe file in bin
+::./build.bat testing clear -> to delete bin_int and bin
+::./build.bat testing clear_bin -> to delete bin
+::./build.bat testing clear_bin_int -> to delete bin_int
+::./build.bat testing info -> debugging information
 ::./build.bat run -> to run the bin/EXE
 
 :: Checking dependencies
@@ -31,6 +36,18 @@ if "%2"=="clear" set "CLEAR=1"
 if "%2"=="clear" set "CLEAR_BIN=1"
 if "%2"=="clear" set "CLEAR_BIN_INT=1"
 if "%2"=="info" set "INFO=1"
+
+if defined BUILD (
+    if "%3"=="" (
+        echo "Please provide the filename to run"
+        exit /b
+    )
+)
+
+
+
+echo #include "includes.h" > source/main.c
+echo int main() {zmemory_init();zmemory_log();logger_init(1024 * 1024);%3_run();logger_shutdown();zmemory_log();zmemory_destroy();return 0;} >> source/main.c
 
 
 :: Running the executable if requested

@@ -87,6 +87,7 @@ static const char* mem_str[] = {
     "LOGGER               ",
     "LINEAR_ALLOCATOR     ",
     "FREELIST_ALLOCATOR   ",
+    "DISJOINT_SET         ",
 };
 
 void zmemory_log() {

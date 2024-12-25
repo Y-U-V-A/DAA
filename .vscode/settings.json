@@ -98,6 +98,8 @@
         "graph_generator.h": "c",
         "topo_sort_dfs.h": "c",
         "kosaraju_strongly_connected.h": "c",
-        "bellman_ford_shortest_path.h": "c"
+        "bellman_ford_shortest_path.h": "c",
+        "floyd_warshall_shortest_paths.h": "c",
+        "prims_mst.h": "c"
     },
 }

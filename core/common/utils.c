@@ -49,3 +49,8 @@ char* string_copy(char* dest, const char* src, u64 size) {
 u64 string_length(const char* str) {
     return strlen(str);
 }
+
+void builtin_quick_sort(void* ptr, u64 count, u64 size,
+                        int (*comp)(const void*, const void*)) {
+    qsort(ptr, count, size, comp);
+}

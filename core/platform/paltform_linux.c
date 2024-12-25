@@ -6,6 +6,7 @@
 #    include <unistd.h>
 #    include <stdlib.h>
 #    include <time.h>
+#    include <stdio.h>
 #    include <semaphore.h>
 #    include "logger.h"
 #    include "zthread.h"

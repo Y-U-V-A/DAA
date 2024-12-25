@@ -27,4 +27,7 @@ char* string_copy(char* dest, const char* src, u64 size);
 
 #endif
 
+void builtin_quick_sort(void* ptr, u64 count, u64 size,
+                        int (*comp)(const void*, const void*));
+
 #endif

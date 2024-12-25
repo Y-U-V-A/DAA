@@ -19,6 +19,7 @@ typedef enum zmemory_tag {
     MEMORY_TAG_LOGGER,
     MEMORY_LINEAR_ALLOCATOR,
     MEMORY_FREELIST_ALLOCATOR,
+    MEMORY_DISJOINT_SET,
 
     MEMORY_TAG_MAX,
 } zmemory_tag;
